@@ -1,72 +1,64 @@
-from models.Object import Object
-from PyQt5 import QtCore, QtGui, QtWidgets
+from models.object_3d import *
+from models.camera import *
+from models.projection import *
+import pygame as pg
 
-class Ui_MainWindow(object):
-  def setupUi(self, MainWindow):
-    MainWindow.setObjectName("MainWindow")
-    MainWindow.resize(977, 600)
-    self.centralwidget = QtWidgets.QWidget(MainWindow)
-    self.centralwidget.setObjectName("centralwidget")
-    self.openGLWidget = QtWidgets.QOpenGLWidget(self.centralwidget)
-    self.openGLWidget.setGeometry(QtCore.QRect(10, 10, 781, 531))
-    self.openGLWidget.setObjectName("openGLWidget")
-    MainWindow.setCentralWidget(self.centralwidget)
-    self.menubar = QtWidgets.QMenuBar(MainWindow)
-    self.menubar.setGeometry(QtCore.QRect(0, 0, 977, 21))
-    self.menubar.setObjectName("menubar")
-    self.menuFile = QtWidgets.QMenu(self.menubar)
-    self.menuFile.setObjectName("menuFile")
-    MainWindow.setMenuBar(self.menubar)
-    self.statusbar = QtWidgets.QStatusBar(MainWindow)
-    self.statusbar.setObjectName("statusbar")
-    MainWindow.setStatusBar(self.statusbar)
-    self.actionChoose_File = QtWidgets.QAction(MainWindow)
-    self.actionChoose_File.setObjectName("actionChoose_File")
-    self.actionChoose_File.triggered.connect(self.open_file)
-    self.actionClose_File = QtWidgets.QAction(MainWindow)
-    self.actionClose_File.setObjectName("actionClose_File")
-    self.menuFile.addAction(self.actionChoose_File)
-    self.menuFile.addAction(self.actionClose_File)
-    self.menubar.addAction(self.menuFile.menuAction())
 
-    self.retranslateUi(MainWindow)
-    QtCore.QMetaObject.connectSlotsByName(MainWindow)
+class SoftwareRender:
+    def __init__(self):
+        pg.init()
+        self.RES = self.WIDTH, self.HEIGHT = 1280, 720
+        self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
+        self.FPS = 60
+        self.screen = pg.display.set_mode(self.RES)
+        self.clock = pg.time.Clock()
+        self.create_objects()
 
-  def retranslateUi(self, MainWindow):
-    _translate = QtCore.QCoreApplication.translate
-    MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-    self.menuFile.setTitle(_translate("MainWindow", "File"))
-    self.actionChoose_File.setText(_translate("MainWindow", "Open File"))
-    self.actionClose_File.setText(_translate("MainWindow", "Close File"))
+    def create_objects(self):
+        self.camera = Camera(self, [0, 5, -35])
+        self.projection = Projection(self)
+        self.object = self.get_object_from_file('Modelos3D/mariotroph.obj')
+        # self.object.rotate_y(-math.pi / 4)
 
-  def open_file(self):
-    file_name = QtWidgets.QFileDialog.getOpenFileName(None, 'Open File', './Modelos3D', '*.obj')
-    read_file(file_name[0])
+    def get_object_from_file(self, filename):
+        vertex, faces = [], []
+        with open(filename) as f:
+            for line in f:
+                if line.startswith('v '):
+                    vertex.append([float(i) for i in line.split()[1:]] + [1])
+                elif line.startswith('f'):
+                    faces_ = line.split()[1:]
+                    faces.append([int(face_.split('/')[0]) - 1 for face_ in faces_])
+        return Object3D(self, vertex, faces)
 
-def read_file(file_name: str):
-  with open(file_name) as f:
-    obj = Object()
-    for line in f:
-      line = line.replace(",", ".")
-      id_, x, y, z = line.split(" ")
-      
-      if id_ == 'f':
-        obj.add_face([x, y, z.replace("\n", "")])
-      else:
-        x = float(x)
-        y = float(y)
-        z = float(z)
-        if id_ == 'v':
-          obj.add_vertice(x, y, z)
-        elif id_ == 'vn':
-          obj.add_normal_vertice(x, y, z)
-  print("Arquivo obj lido com sucesso!")
+    def draw(self, zoom_type: str):
+        self.screen.fill(pg.Color('black'))
+        self.object.draw(zoom_type)
 
-if __name__ == "__main__":
-  import sys
-  app = QtWidgets.QApplication(sys.argv)
-  MainWindow = QtWidgets.QMainWindow()
-  ui = Ui_MainWindow()
-  ui.setupUi(MainWindow)
-  MainWindow.show()
-  sys.exit(app.exec_())
+    def run(self):
+        curr_wheel = "none"
+        while True:
+            self.draw(curr_wheel)
+            for event in pg.event.get():
+                mouse_pos = pg.mouse.get_pos()
+                if event.type == pg.QUIT:
+                    exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    xy1 = (mouse_pos[0] - 10, mouse_pos[1] - 100)
+                elif event.type == pg.MOUSEBUTTONUP:
+                    xy2 = (mouse_pos[0] - 10, mouse_pos[1] - 100)
+                if event.type == pg.MOUSEWHEEL:
+                    # x: 0, y: -1 => MOUSEWHEELBACK == "Zoom Out"
+                    # x: 0, y: 1 => MOUSEWHEELFRONT == "Zoom In"
+                    if event.y == -1:
+                        curr_wheel = "in"
+                    elif event.y == 1:
+                        curr_wheel = "out"
+                    else:
+                        curr_wheel = "none"
+            pg.display.set_caption(str(self.clock.get_fps()))
+            pg.display.flip()
+            self.clock.tick(self.FPS)
+if __name__ == '__main__':
+    app = SoftwareRender()
+    app.run()
