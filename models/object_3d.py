@@ -19,14 +19,25 @@ class Object3D:
         self.color_faces = [(pg.Color('white'), face) for face in self.faces]
         self.movement_flag, self.draw_vertexes = True, False
         self.label = ''
+        self.direction = ""
 
-    def draw(self, zoom_type: str):
-        self.screen_projection(zoom_type)
-        # self.movement()
+    def draw(self):
+        self.screen_projection()
+        self.movement()
 
     def movement(self):
-        if self.movement_flag:
+        if self.direction == "left" and self.movement_flag:
             self.rotate_y(-(pg.time.get_ticks() % 0.005))
+            self.movement_flag = False
+        elif self.direction == "right":
+            self.rotate_y((pg.time.get_ticks() % 0.005))
+            self.movement_flag = False
+        if self.direction == "up":
+            self.rotate_x(-(pg.time.get_ticks() % 0.005))
+            self.movement_flag = False
+        if self.direction == "down":
+            self.rotate_x((pg.time.get_ticks() % 0.005))
+            self.movement_flag = False
 
     def screen_projection(self):
         vertexes = self.vertexes @ self.render.camera.camera_matrix()

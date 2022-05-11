@@ -4,7 +4,7 @@ from models.projection import *
 import pygame as pg
 
 
-class SoftwareRender:
+class ObjectManipulator:
     def __init__(self):
         pg.init()
         self.RES = self.WIDTH, self.HEIGHT = 1280, 720
@@ -31,34 +31,61 @@ class SoftwareRender:
                     faces.append([int(face_.split('/')[0]) - 1 for face_ in faces_])
         return Object3D(self, vertex, faces)
 
-    def draw(self, zoom_type: str):
-        self.screen.fill(pg.Color('black'))
-        self.object.draw(zoom_type)
+    def draw(self):
+        self.screen.fill(pg.Color('gray10'))
+        self.object.draw()
 
     def run(self):
-        curr_wheel = "none"
-        while True:
-            self.draw(curr_wheel)
+        running = True
+        _event = {
+            'wheel': "",
+            'pos': {
+                'xy1': (),
+                'xy2': ()
+            }
+        }
+        while running:
+            self.draw()
+            self.camera.control(event=_event)
             for event in pg.event.get():
                 mouse_pos = pg.mouse.get_pos()
                 if event.type == pg.QUIT:
-                    exit()
+                    running = False
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    xy1 = (mouse_pos[0] - 10, mouse_pos[1] - 100)
+                    _event['pos']['xy1'] = (mouse_pos[0] - 10, mouse_pos[1] - 100)
                 elif event.type == pg.MOUSEBUTTONUP:
-                    xy2 = (mouse_pos[0] - 10, mouse_pos[1] - 100)
+                    _event['pos']['xy2'] = (mouse_pos[0] - 10, mouse_pos[1] - 100)
+                    # if _event['pos']['xy2'][1] < _event['pos']['xy1'][1]:  # x2 < x1
+                    #     if _event['pos']['xy2'][0] < _event['pos']['xy1'][0]:  # y2 < y1
+                    #         self.object.direction = "right"
+                    #     else:
+                    #         self.object.direction = "down"
+                    # elif _event['pos']['xy2'][1] > _event['pos']['xy1'][1]:  # x2 > x1
+                    #     if _event['pos']['xy2'][0] > _event['pos']['xy1'][0]:  # y2 > y1
+                    #         self.object.direction = "left"
+                    #     else:
+                    #         self.object.direction = "up"
+                    # else:
+                    #     self.object.direction = "none"
+                    # # print(_event['pos'])
+                    # # print(pg.mouse.get_rel())
                 if event.type == pg.MOUSEWHEEL:
                     # x: 0, y: -1 => MOUSEWHEELBACK == "Zoom Out"
                     # x: 0, y: 1 => MOUSEWHEELFRONT == "Zoom In"
                     if event.y == -1:
-                        curr_wheel = "in"
+                        _event['wheel'] = "in"
                     elif event.y == 1:
-                        curr_wheel = "out"
+                        _event['wheel'] = "out"
                     else:
-                        curr_wheel = "none"
-            pg.display.set_caption(str(self.clock.get_fps()))
+                        _event['wheel'] = "none"
+
+
+
+            pg.display.set_caption(f"FPS: {self.clock.get_fps()}")
             pg.display.flip()
             self.clock.tick(self.FPS)
+
+
 if __name__ == '__main__':
-    app = SoftwareRender()
+    app = ObjectManipulator()
     app.run()

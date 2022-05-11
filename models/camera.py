@@ -12,11 +12,16 @@ class Camera:
         self.v_fov = self.h_fov * (render.HEIGHT / render.WIDTH)
         self.near_plane = 0.5
         self.far_plane = 100
-        self.moving_speed = 0.3
+        self.moving_speed = 0.4
         self.rotation_speed = 0.015
 
-    def control(self,event):
-        print(event)
+    def control(self, event: dict):
+        if event['wheel'] == 'in':
+            self.position += self.forward * self.moving_speed
+            event['wheel'] = 'none'
+        elif event['wheel'] == 'out':
+            self.position -= self.forward * self.moving_speed
+            event['wheel'] = 'none'
         # print(event.x, event.y)
         # print(event.flipped)
         # print(event.which)
