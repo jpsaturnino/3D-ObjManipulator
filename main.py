@@ -2,6 +2,16 @@ from models.object_3d import *
 from models.camera import *
 from models.projection import *
 import pygame as pg
+import tkinter
+import tkinter.filedialog
+
+def file_dialog():
+    """Create a Tk file dialog and cleanup when finished"""
+    top = tkinter.Tk()
+    top.withdraw()  # hide window
+    file_name = tkinter.filedialog.askopenfilename(parent=top)
+    top.destroy()
+    return file_name
 
 
 class ObjectManipulator:
@@ -12,12 +22,12 @@ class ObjectManipulator:
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
+        # self.create_objects(file_dialog())
         self.create_objects()
-
-    def create_objects(self):
+    def create_objects(self, filename = "Modelos3D/mariotroph.obj"):
         self.camera = Camera(self, [0, 5, -35])
         self.projection = Projection(self)
-        self.object = self.get_object_from_file('Modelos3D/mariotroph.obj')
+        self.object = self.get_object_from_file(filename)
         # self.object.rotate_y(-math.pi / 4)
 
     def get_object_from_file(self, filename):
@@ -36,6 +46,7 @@ class ObjectManipulator:
         self.object.draw()
 
     def run(self):
+
         running = True
         _event = {
             'wheel': "",
@@ -55,20 +66,21 @@ class ObjectManipulator:
                     _event['pos']['xy1'] = (mouse_pos[0] - 10, mouse_pos[1] - 100)
                 elif event.type == pg.MOUSEBUTTONUP:
                     _event['pos']['xy2'] = (mouse_pos[0] - 10, mouse_pos[1] - 100)
-                    # if _event['pos']['xy2'][1] < _event['pos']['xy1'][1]:  # x2 < x1
-                    #     if _event['pos']['xy2'][0] < _event['pos']['xy1'][0]:  # y2 < y1
-                    #         self.object.direction = "right"
-                    #     else:
-                    #         self.object.direction = "down"
-                    # elif _event['pos']['xy2'][1] > _event['pos']['xy1'][1]:  # x2 > x1
-                    #     if _event['pos']['xy2'][0] > _event['pos']['xy1'][0]:  # y2 > y1
-                    #         self.object.direction = "left"
-                    #     else:
-                    #         self.object.direction = "up"
-                    # else:
-                    #     self.object.direction = "none"
-                    # # print(_event['pos'])
-                    # # print(pg.mouse.get_rel())
+                    if _event['pos']['xy2'][1] < _event['pos']['xy1'][1]:  # x2 < x1
+                        if _event['pos']['xy2'][0] < _event['pos']['xy1'][0]:  # y2 < y1
+                            self.object.direction = "right"
+                        else:
+                            self.object.direction = "down"
+                    elif _event['pos']['xy2'][1] > _event['pos']['xy1'][1]:  # x2 > x1
+                        if _event['pos']['xy2'][0] > _event['pos']['xy1'][0]:  # y2 > y1
+                            self.object.direction = "left"
+                        else:
+                            self.object.direction = "up"
+                    else:
+                        self.object.direction = "none"
+                    # print(_event['pos'])
+                print(pg.mouse.get_pressed())
+                # da pra pegar isso aqui em cima e verificar enquanto ta pressionado permitir movimentar, senao não permite movimentar
                 if event.type == pg.MOUSEWHEEL:
                     # x: 0, y: -1 => MOUSEWHEELBACK == "Zoom Out"
                     # x: 0, y: 1 => MOUSEWHEELFRONT == "Zoom In"

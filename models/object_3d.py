@@ -38,6 +38,59 @@ class Object3D:
         if self.direction == "down":
             self.rotate_x((pg.time.get_ticks() % 0.005))
             self.movement_flag = False
+    # Draw with midpoint line render method
+    def draw_line(self, xy1, xy2, color):
+        x1, y1 = xy1
+        x2, y2 = xy2
+
+        dx = x2 - x1
+        dy = y2 - y1
+        if (abs(dx) > abs(dy)):
+            if (x1 > x2):
+                self.draw_line(xy2, xy1, color)
+            else:
+                if (dy < 0):
+                    declive = -1
+                    dy = -dy
+                else:
+                    declive = 1
+
+                inc_e = 2 * dy
+                inc_ne = 2 * dy - 2 * dx
+                d = 2 * dy - dx
+                y = y1
+                for x in range(int(x1), int(x2), 1):
+                    pg.draw.circle(self.render.screen, color, (x, y), 1, 1)
+                    if (d <= 0):
+                        d += inc_e
+                    else:
+                        d += inc_ne
+                        y += declive
+        else:
+            if (y1 > y2):
+                self.draw_line(xy2, xy1, color)
+            else:
+                if (dx < 0):
+                    declive = -1
+                    dx = -dx
+                else:
+                    declive = 1
+                inc_e = 2 * dx
+                inc_ne = 2 * dx - 2 * dy
+                d = 2 * dx - dy
+                x = x1
+                for y in range(int(y1), int(y2), 1):
+                    pg.draw.circle(self.render.screen, color, (x, y), 1, 1)
+                    if (d <= 0):
+                        d += inc_e
+                    else:
+                        d += inc_ne
+                        x += declive
+
+    def draw_polygon(self, polygon, color):
+        self.draw_line(polygon[0], polygon[1], color)
+        self.draw_line(polygon[1], polygon[2], color)
+        self.draw_line(polygon[2], polygon[0], color)
 
     def screen_projection(self):
         vertexes = self.vertexes @ self.render.camera.camera_matrix()
@@ -46,18 +99,19 @@ class Object3D:
         vertexes[(vertexes > 2) | (vertexes < -2)] = 0
         vertexes = vertexes @ self.render.projection.to_screen_matrix
         vertexes = vertexes[:, :2]
-
         for index, color_face in enumerate(self.color_faces):
             color, face = color_face
             polygon = vertexes[face]
             if not any_func(polygon, self.render.H_WIDTH, self.render.H_HEIGHT):
-                pg.draw.polygon(self.render.screen, color, polygon, 1)
+                # pg.draw.polygon(self.render.screen, color, polygon, 1)
+                self.draw_polygon(polygon, color) # using bresshan
                 if self.label:
                     text = self.font.render(self.label[index], True, pg.Color('white'))
                     self.render.screen.blit(text, polygon[-1])
 
         if self.draw_vertexes:
             for vertex in vertexes:
+                print(vertex)
                 if not any_func(vertex, self.render.H_WIDTH, self.render.H_HEIGHT):
                     pg.draw.circle(self.render.screen, pg.Color('white'), vertex, 2)
 
