@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from models.object_3d import *
 from models.camera import *
 from models.projection import *
@@ -13,19 +15,20 @@ def file_dialog():
     top.destroy()
     return file_name
 
-
 class ObjectManipulator:
     def __init__(self):
         pg.init()
-        self.RES = self.WIDTH, self.HEIGHT = 1280, 720
+        self.RES = self.WIDTH, self.HEIGHT = 1080, 600
         self.H_WIDTH, self.H_HEIGHT = self.WIDTH // 2, self.HEIGHT // 2
         self.FPS = 60
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
-        # self.create_objects(file_dialog())
-        self.create_objects()
+        self.move = [False, False, False]
+        self.mouse_point = tuple()
+        self.create_objects(filename=file_dialog())
+
     def create_objects(self, filename = "Modelos3D/mariotroph.obj"):
-        self.camera = Camera(self, [0, 5, -35])
+        self.camera = Camera(self, [0, 5, -305])
         self.projection = Projection(self)
         self.object = self.get_object_from_file(filename)
         # self.object.rotate_y(-math.pi / 4)
@@ -45,54 +48,44 @@ class ObjectManipulator:
         self.screen.fill(pg.Color('gray10'))
         self.object.draw()
 
-    def run(self):
+    def object_movement(self):
+        # mouse left button pressed
+        current_mouse = pg.mouse.get_pos()
+        if self.move[0]:
+            if current_mouse[0] != self.mouse_point[0] and current_mouse[1] != self.mouse_point[1]:
+                # self.object.rotate_x(angle=(current_mouse[1] - self.mouse_point[1]))
+                self.object.rotate_y(angle=pg.time.get_ticks() % (current_mouse[0] - self.mouse_point[0]) * 0.005)
+        if self.move[2]:
+            if current_mouse[0] != self.mouse_point[0] and current_mouse[1] != self.mouse_point[1]:
+                # self.object.rotate_x(angle=(current_mouse[1] - self.mouse_point[1]))
+                self.object.rotate_x(angle=pg.time.get_ticks() % (current_mouse[1] - self.mouse_point[1]) * 0.005)
 
+    def run(self):
         running = True
         _event = {
-            'wheel': "",
-            'pos': {
-                'xy1': (),
-                'xy2': ()
-            }
+            'wheel': ""
         }
         while running:
             self.draw()
+            # if the left button is pressed, movement the object
             self.camera.control(event=_event)
             for event in pg.event.get():
-                mouse_pos = pg.mouse.get_pos()
+                mouse_pos: Tuple[int, int] = pg.mouse.get_pos()
                 if event.type == pg.QUIT:
                     running = False
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    _event['pos']['xy1'] = (mouse_pos[0] - 10, mouse_pos[1] - 100)
+                    self.move = pg.mouse.get_pressed()
+                    self.mouse_point = mouse_pos
                 elif event.type == pg.MOUSEBUTTONUP:
-                    _event['pos']['xy2'] = (mouse_pos[0] - 10, mouse_pos[1] - 100)
-                    if _event['pos']['xy2'][1] < _event['pos']['xy1'][1]:  # x2 < x1
-                        if _event['pos']['xy2'][0] < _event['pos']['xy1'][0]:  # y2 < y1
-                            self.object.direction = "right"
-                        else:
-                            self.object.direction = "down"
-                    elif _event['pos']['xy2'][1] > _event['pos']['xy1'][1]:  # x2 > x1
-                        if _event['pos']['xy2'][0] > _event['pos']['xy1'][0]:  # y2 > y1
-                            self.object.direction = "left"
-                        else:
-                            self.object.direction = "up"
-                    else:
-                        self.object.direction = "none"
-                    # print(_event['pos'])
-                print(pg.mouse.get_pressed())
-                # da pra pegar isso aqui em cima e verificar enquanto ta pressionado permitir movimentar, senao não permite movimentar
+                    self.move = [False, False, False]
                 if event.type == pg.MOUSEWHEEL:
-                    # x: 0, y: -1 => MOUSEWHEELBACK == "Zoom Out"
-                    # x: 0, y: 1 => MOUSEWHEELFRONT == "Zoom In"
-                    if event.y == -1:
+                    if event.y == -1:  # x: 0, y: -1 => MOUSEWHEELBACK == "Zoom Out"
                         _event['wheel'] = "in"
-                    elif event.y == 1:
+                    elif event.y == 1:  # x: 0, y: 1 => MOUSEWHEELFRONT == "Zoom In"
                         _event['wheel'] = "out"
                     else:
                         _event['wheel'] = "none"
-
-
-
+                self.object_movement()
             pg.display.set_caption(f"FPS: {self.clock.get_fps()}")
             pg.display.flip()
             self.clock.tick(self.FPS)

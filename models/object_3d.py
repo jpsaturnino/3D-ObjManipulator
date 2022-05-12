@@ -23,21 +23,24 @@ class Object3D:
 
     def draw(self):
         self.screen_projection()
-        self.movement()
 
-    def movement(self):
-        if self.direction == "left" and self.movement_flag:
-            self.rotate_y(-(pg.time.get_ticks() % 0.005))
-            self.movement_flag = False
-        elif self.direction == "right":
-            self.rotate_y((pg.time.get_ticks() % 0.005))
-            self.movement_flag = False
-        if self.direction == "up":
-            self.rotate_x(-(pg.time.get_ticks() % 0.005))
-            self.movement_flag = False
-        if self.direction == "down":
-            self.rotate_x((pg.time.get_ticks() % 0.005))
-            self.movement_flag = False
+
+    def movement(self, mouse_pressed):
+        if mouse_pressed:
+            print("movimentando")
+            # if self.direction == "up":
+            #     self.rotate_x((pg.time.get_ticks() % 0.005))
+            #     self.movement_flag = False
+            # elif self.direction == "left":
+            #     self.rotate_x(-(pg.time.get_ticks() % 0.005))
+            #     self.movement_flag = False
+            # if self.direction == "down":
+            #     self.rotate_y(-(pg.time.get_ticks() % 0.005))
+            #     self.movement_flag = False
+            # if self.direction == "right":
+            #     self.rotate_y((pg.time.get_ticks() % 0.005))
+            #     self.movement_flag = False
+
     # Draw with midpoint line render method
     def draw_line(self, xy1, xy2, color):
         x1, y1 = xy1
@@ -88,9 +91,8 @@ class Object3D:
                         x += declive
 
     def draw_polygon(self, polygon, color):
-        self.draw_line(polygon[0], polygon[1], color)
-        self.draw_line(polygon[1], polygon[2], color)
-        self.draw_line(polygon[2], polygon[0], color)
+        self.draw_line(polygon[0], polygon[2], color)
+        # self.draw_line(polygon[1], polygon[2], color)
 
     def screen_projection(self):
         vertexes = self.vertexes @ self.render.camera.camera_matrix()
@@ -103,8 +105,8 @@ class Object3D:
             color, face = color_face
             polygon = vertexes[face]
             if not any_func(polygon, self.render.H_WIDTH, self.render.H_HEIGHT):
-                # pg.draw.polygon(self.render.screen, color, polygon, 1)
-                self.draw_polygon(polygon, color) # using bresshan
+                pg.draw.polygon(self.render.screen, color, polygon, 1)
+                # self.draw_polygon(polygon, color) # using bresshan
                 if self.label:
                     text = self.font.render(self.label[index], True, pg.Color('white'))
                     self.render.screen.blit(text, polygon[-1])
