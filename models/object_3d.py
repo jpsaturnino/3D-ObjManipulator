@@ -41,7 +41,7 @@ class Object3D:
             #     self.rotate_y((pg.time.get_ticks() % 0.005))
             #     self.movement_flag = False
 
-    # Draw with midpoint line render method
+    # Draw with midpoint line render method - bresshan
     def draw_line(self, xy1, xy2, color):
         x1, y1 = xy1
         x2, y2 = xy2
