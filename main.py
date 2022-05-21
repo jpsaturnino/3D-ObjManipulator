@@ -28,7 +28,7 @@ class ObjectManipulator:
         self.create_objects(filename=file_dialog())
 
     def create_objects(self, filename = "Modelos3D/mariotroph.obj"):
-        self.camera = Camera(self, [0, 5, -305])
+        self.camera = Camera(self, [0, 5, -35])
         self.projection = Projection(self)
         self.object = self.get_object_from_file(filename)
         # self.object.rotate_y(-math.pi / 4)
@@ -54,11 +54,11 @@ class ObjectManipulator:
         if self.move[0]:
             if current_mouse[0] != self.mouse_point[0] and current_mouse[1] != self.mouse_point[1]:
                 # self.object.rotate_x(angle=(current_mouse[1] - self.mouse_point[1]))
-                self.object.rotate_y(angle=pg.time.get_ticks() % (current_mouse[0] - self.mouse_point[0]) * 0.005)
+                self.object.rotate_y(angle=-(pg.time.get_ticks() % (current_mouse[0] - self.mouse_point[0]) * 0.00005))
         if self.move[2]:
             if current_mouse[0] != self.mouse_point[0] and current_mouse[1] != self.mouse_point[1]:
                 # self.object.rotate_x(angle=(current_mouse[1] - self.mouse_point[1]))
-                self.object.rotate_x(angle=pg.time.get_ticks() % (current_mouse[1] - self.mouse_point[1]) * 0.005)
+                self.object.rotate_x(angle=-(pg.time.get_ticks() % (current_mouse[1] - self.mouse_point[1]) * 0.00005))
 
     def run(self):
         running = True
