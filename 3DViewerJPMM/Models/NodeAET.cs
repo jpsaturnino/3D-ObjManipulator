@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 namespace _3DViewerJPMM.Models
 {
     internal class NodeAET
-    {
+    { 
         private int ymax;
-        private int xmin, incx;
+        private double xmin, incx;
         private double zmin, bzmin, rxmin, gymin;
         // ----------------------------------------
         private double inczy, incrx, incgy, incbz;
         // ----------------------------------------
 
-        public (int ymax, double xmin, double incx, double zmin, double inczy, double rxmin, double gymin, double bzmin, double incrx, double incgy, double incbz)
-        {
+        public NodeAET(int ymax, double xmin, double incx, double zmin, double inczy, double rxmin, double gymin, double bzmin, double incrx, double incgy, double incbz){
             this.ymax = ymax;
             this.xmin = xmin;
             this.zmin = zmin;
@@ -30,61 +29,60 @@ namespace _3DViewerJPMM.Models
             this.incbz = incbz;
         }
 
-        public int ymax
-        {
+        public int Ymax{
             get { return ymax; }
             set { ymax = value; }
         }
 
-        public double xmin
+        public double Xmin
         {
             get { return xmin; }
             set { xmin = value; }
         }
     
-        public double zmin
+        public double Zmin
         {
             get { return zmin; }
             set { zmin = value; }
         }
         
-        public double gymin
+        public double Gymin
         {
             get { return gymin; }
             set { gymin = value; }
         }
         
-        public double rxmin
+        public double Rxmin
         {
             get { return rxmin; }
             set { rxmin = value; }
         }
         
-        public double incx
+        public double Incx
         {
             get { return incx; }
             set { incx = value; }
         }
     
-        public double inczy
+        public double Inczy
         {
             get { return inczy; }
             set { inczy = value; }
         }
 
-        public double incrx
+        public double Incrx
         {
             get { return incrx; }
             set { incrx = value; }
         }
 
-        public double incgy
+        public double Incgy
         {
             get { return incgy; }
             set { incgy = value; }
         }
 
-        public double incbz
+        public double Incbz
         {
             get { return incbz; }
             set { incbz = value; }

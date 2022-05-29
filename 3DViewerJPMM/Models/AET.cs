@@ -12,7 +12,7 @@ namespace _3DViewerJPMM.Models
 
         public AET()
         {
-            _list = new List<NodeAET>();
+            this._list = new List<NodeAET>();
 
         }
 
@@ -21,21 +21,23 @@ namespace _3DViewerJPMM.Models
             _list.Add(info);
         }
 
-        public List<NodeAET> _list
+        public List<NodeAET> _List
         {
             get { return _list; }
             set { _list = value;}
         }
 
-        public void add(NodeAET AETList)
+        public void insert(NodeAET AETList)
         {
             foreach (NodeAET node in AETList)
+            {
                 _list.Add(node);
+            }
         }
 
         public void sort()
         {
-            if (_list.Count())
+            if (this._list.Count() > 0)
             {
                 Stack<int> stack = new Stack<int>();
                 NodeAET auxNode;

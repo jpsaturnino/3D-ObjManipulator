@@ -17,6 +17,25 @@ namespace _3DViewerJPMM.Models
             this.MA = Identity(4);
         }
 
-        private void Load3DObject(string )
+        private void Load3DObject(string filepath)
+        {
+            string[] lines = System.IO.File.ReadAllLines(filepath);
+            int i = 0;
+            foreach (string line in lines)
+            {
+                if (line.StartsWith("v "))
+                {
+                    string[] values = line.Split(' ');
+                    this.mainVertices.Add(new Vertex(double.Parse(values[1]), double.Parse(values[2]), double.Parse(values[3])));
+                    this.currentVertices.Add(new Vertex(double.Parse(values[1]), double.Parse(values[2]), double.Parse(values[3])));
+                }
+                else if (line.StartsWith("f "))
+                {
+                    string[] values = line.Split(' ');
+                    this.faces.Add(new int[] { int.Parse(values[1]) - 1, int.Parse(values[2]) - 1, int.Parse(values[3]) - 1 });
+                }
+                i++;
+            }
+        }
     }
 }

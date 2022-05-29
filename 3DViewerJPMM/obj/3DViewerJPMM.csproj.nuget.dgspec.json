@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\JP\\Documents\\faculdade\\2022\\1_semestre\\computacao_grafica\\3DViewerJPMM\\3DViewerJPMM\\3DViewerJPMM.csproj": {}
+    "C:\\Users\\mateu\\programming\\new3dObjManipulator\\3D-ObjManipulator\\3DViewerJPMM\\3DViewerJPMM.csproj": {}
   },
   "projects": {
-    "C:\\Users\\JP\\Documents\\faculdade\\2022\\1_semestre\\computacao_grafica\\3DViewerJPMM\\3DViewerJPMM\\3DViewerJPMM.csproj": {
+    "C:\\Users\\mateu\\programming\\new3dObjManipulator\\3D-ObjManipulator\\3DViewerJPMM\\3DViewerJPMM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\JP\\Documents\\faculdade\\2022\\1_semestre\\computacao_grafica\\3DViewerJPMM\\3DViewerJPMM\\3DViewerJPMM.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\programming\\new3dObjManipulator\\3D-ObjManipulator\\3DViewerJPMM\\3DViewerJPMM.csproj",
         "projectName": "3DViewerJPMM",
-        "projectPath": "C:\\Users\\JP\\Documents\\faculdade\\2022\\1_semestre\\computacao_grafica\\3DViewerJPMM\\3DViewerJPMM\\3DViewerJPMM.csproj",
-        "packagesPath": "C:\\Users\\JP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\JP\\Documents\\faculdade\\2022\\1_semestre\\computacao_grafica\\3DViewerJPMM\\3DViewerJPMM\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\programming\\new3dObjManipulator\\3D-ObjManipulator\\3DViewerJPMM\\3DViewerJPMM.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\programming\\new3dObjManipulator\\3D-ObjManipulator\\3DViewerJPMM\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\JP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

@@ -1,0 +1,8 @@
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.AssemblyReference.cache
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\_3DViewerJPMM.MainView.resources
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\_3DViewerJPMM.Properties.Resources.resources
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.GenerateResource.cache
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.AssemblyInfoInputs.cache
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.AssemblyInfo.cs
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.CoreCompileInputs.cache
