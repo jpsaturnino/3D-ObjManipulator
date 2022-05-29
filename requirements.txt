@@ -1,3 +1,0 @@
-pygame
-numpy==1.21
-numba
