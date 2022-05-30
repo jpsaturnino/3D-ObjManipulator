@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.AssemblyReference.cache
 C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\_3DViewerJPMM.MainView.resources
 C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.GenerateResource.cache
@@ -15,3 +16,13 @@ C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipul
 C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.pdb
 C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.genruntimeconfig.cache
 C:\Users\JP\Documents\faculdade\2022\1_semestre\computacao_grafica\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\ref\3DViewerJPMM.dll
+=======
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.AssemblyReference.cache
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\_3DViewerJPMM.MainView.resources
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\_3DViewerJPMM.Properties.Resources.resources
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.GenerateResource.cache
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.AssemblyInfoInputs.cache
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.AssemblyInfo.cs
+C:\Users\mateu\programming\new3dObjManipulator\3D-ObjManipulator\3DViewerJPMM\obj\Debug\net6.0-windows\3DViewerJPMM.csproj.CoreCompileInputs.cache
+>>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64

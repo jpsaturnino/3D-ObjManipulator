@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+<<<<<<< HEAD
             this.LoadObjectBtn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -68,30 +69,72 @@
             this.pictureBox1.Size = new System.Drawing.Size(717, 423);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
+=======
+            this.Object3dPB = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.Object3dPB)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // Object3dPB
+            // 
+            this.Object3dPB.BackColor = System.Drawing.SystemColors.WindowText;
+            this.Object3dPB.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.Object3dPB.Location = new System.Drawing.Point(43, 131);
+            this.Object3dPB.Name = "Object3dPB";
+            this.Object3dPB.Size = new System.Drawing.Size(909, 479);
+            this.Object3dPB.TabIndex = 0;
+            this.Object3dPB.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button1.Location = new System.Drawing.Point(841, 73);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(111, 32);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Open Object";
+            this.button1.UseVisualStyleBackColor = true;
+>>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
             // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+<<<<<<< HEAD
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.ClientSize = new System.Drawing.Size(935, 543);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+=======
+            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.ClientSize = new System.Drawing.Size(987, 634);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Object3dPB);
+>>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
             this.Name = "MainView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "3D";
             this.Load += new System.EventHandler(this.MainView_Load);
+<<<<<<< HEAD
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+=======
+            ((System.ComponentModel.ISupportInitialize)(this.Object3dPB)).EndInit();
+>>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
+<<<<<<< HEAD
         private Button LoadObjectBtn;
         private Panel panel1;
         private PictureBox pictureBox1;
+=======
+        private PictureBox Object3dPB;
+        private Button button1;
+>>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
     }
 }
