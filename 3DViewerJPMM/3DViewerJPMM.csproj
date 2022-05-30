@@ -7,7 +7,14 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\  ET.cs" />
+    <Compile Remove="Models\AET.cs" />
+    <Compile Remove="Models\ET.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Models\AET.txt" />

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static _3DViewerJPMM.Utils.Helper;
 
 namespace _3DViewerJPMM.Models
 {
@@ -34,12 +30,24 @@ namespace _3DViewerJPMM.Models
             return new Vertex(this.x - v.x, this.y - v.y, this.z - v.z);
         }
 
-        public Vertex Normalization()
+        public Vertex Division(double d)
         {
-            double length = Math.Sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-            return new Vertex(this.x / length, this.y / length, this.z / length);
+            return new Vertex(this.x / d, this.y / d, this.z / d);
+        }
+        
+        private double getMagnitude()
+        {
+            return Math.Sqrt(Math.Pow(this.x, 2) + Math.Pow(this.y, 2) + Math.Pow(this.z, 2));
         }
 
+        public Vertex Normalize()
+        {
+            double magnitude = getMagnitude();
+            if (magnitude == 0)
+                return new Vertex(1, 1, 1);
+            return this.Division(magnitude);
+        }
+       
         public double DotProduct(Vertex v)
         {
             return this.x * v.x + this.y * v.y + this.z * v.z;
@@ -54,10 +62,16 @@ namespace _3DViewerJPMM.Models
             );
         }
 
-        public Vertex Division(double d)
+        public double[,] ToMatrix()
         {
-            return new Vertex(this.x / d, this.y / d, this.z / d);
+            return new double[,] {
+                { this.x },
+                { this.y },
+                { this.z },
+                { 1 }
+            };
         }
+        
         public double X
         {
             get { return x; }
