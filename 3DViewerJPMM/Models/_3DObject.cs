@@ -15,8 +15,10 @@ namespace _3DViewerJPMM.Models
 
         public _3DObject(string file)
         {
-            faces = currentFacesVertex = new List<List<int>>();
-            currentVertices = mainVertices = new List<Vertex>();
+            faces = new List<List<int>>();
+            currentFacesVertex = new List<List<int>>();
+            currentVertices = new List<Vertex>();
+            mainVertices = new List<Vertex>();
             normalFaces = normalVertices = null;
             MA = Identity(4);
             maxX = maxY = maxZ = minX = minY = minZ = 0;
@@ -66,26 +68,29 @@ namespace _3DViewerJPMM.Models
                     faces.Add(face);
                 }
             }
-            UpdateNormalVertices();
+            //UpdateNormalVertices();
             Debug.WriteLine("3D object loaded!");
         }
 
         private void UpdateVertices()
         {
+            Debug.WriteLine("Updating vertices...");
             double[,] matrix;
+            currentVertices.Clear();
             for (int i = 0; i < mainVertices.Count; i++)
             {
                 matrix = Multiply(MA, mainVertices[i].ToMatrix());
                 currentVertices.Add(new Vertex(matrix[0,0], matrix[1, 0], matrix[2, 0]));
             }
+            Debug.WriteLine("Vertices updated!");
         }
-        
-        internal 
-        
+                
         public void Scaling(double sx, double sy, double sz)
         {
+            Debug.WriteLine('\n' + "Scaling...");
             MA = Scale(sx, sy, sz, MA);
             UpdateVertices();
+            Debug.WriteLine("Scaling done!");
         }
         
         public void Translation(double x, double y, double z)
@@ -94,27 +99,29 @@ namespace _3DViewerJPMM.Models
             UpdateVertices();
         }
         
-        public void RotationX(double angle, bool hiddenFaces)
+        public void RotationX(double angle, bool showHiddenFaces)
         {
+            Debug.WriteLine('\n' + "Rotating X...");
             MA = RotateX(angle, MA);
             UpdateVertices();
-            if (!hiddenFaces)
+            if (!showHiddenFaces)
                 UpdateNormalFaces();
+            Debug.WriteLine("Rotating X done!");
         }
         
-        public void RotationY(double angle, bool hiddenFaces)
+        public void RotationY(double angle, bool showHiddenFaces)
         {
             MA = RotateY(angle, MA);
             UpdateVertices();
-            if (!hiddenFaces)
+            if (!showHiddenFaces)
                 UpdateNormalFaces();
         }
         
-        public void RotationZ(double angle, bool hiddenFaces)
+        public void RotationZ(double angle, bool showHiddenFaces)
         {
             MA = RotateZ(angle, MA);
             UpdateVertices();
-            if (!hiddenFaces)
+            if (!showHiddenFaces)
                 UpdateNormalFaces();
         }
         
@@ -148,7 +155,7 @@ namespace _3DViewerJPMM.Models
                 normalVertices[i].Normalize();
             }
         }
-
+        
         public double MAX_X { get => (int)Math.Round(maxX); set => maxX = value; }
 
         public double MAX_Y { get => (int)Math.Round(maxY); set => maxY = value; }
@@ -160,5 +167,23 @@ namespace _3DViewerJPMM.Models
         public double MIN_Y { get => (int)Math.Round(minY); set => minY = value; }
 
         public double MIN_Z { get => (int)Math.Round(minZ); set => minZ = value; }
+
+        public Vertex[] NormalFaces { get => normalFaces; set => normalFaces = value; }
+
+        public Vertex NormalFaceAt(int index)
+        {
+            return normalFaces[index];
+        }
+
+        public Vertex[] NormalVertices { get => normalVertices; set => normalVertices = value; }
+
+        public List<List<int>> Faces { get => faces; set => faces = value; }
+
+        public List<Vertex> CurrentVertices { get => currentVertices; set => currentVertices = value; }
+
+        public List<Vertex> MainVertices { get => mainVertices; set => mainVertices = value; }
+
+        public List<List<int>> CurrentFacesVertex { get => currentFacesVertex; set => currentFacesVertex = value; }
+
     }
 }

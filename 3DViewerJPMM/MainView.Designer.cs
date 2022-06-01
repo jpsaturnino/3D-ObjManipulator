@@ -28,12 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-<<<<<<< HEAD
             this.LoadObjectBtn = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.SidePanel = new System.Windows.Forms.Panel();
+            this.PBMain = new System.Windows.Forms.PictureBox();
+            this.PBFrontalView = new System.Windows.Forms.PictureBox();
+            this.PBLateralView = new System.Windows.Forms.PictureBox();
+            this.PBPlantView = new System.Windows.Forms.PictureBox();
+            this.labelMaterial = new System.Windows.Forms.Label();
+            this.labelAmbient = new System.Windows.Forms.Label();
+            this.SidePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PBMain)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBFrontalView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBLateralView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBPlantView)).BeginInit();
             this.SuspendLayout();
             // 
             // LoadObjectBtn
@@ -44,7 +51,7 @@
             this.LoadObjectBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadObjectBtn.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.LoadObjectBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.LoadObjectBtn.Location = new System.Drawing.Point(0, 514);
+            this.LoadObjectBtn.Location = new System.Drawing.Point(0, 556);
             this.LoadObjectBtn.Name = "LoadObjectBtn";
             this.LoadObjectBtn.Size = new System.Drawing.Size(200, 29);
             this.LoadObjectBtn.TabIndex = 0;
@@ -52,89 +59,107 @@
             this.LoadObjectBtn.UseVisualStyleBackColor = false;
             this.LoadObjectBtn.Click += new System.EventHandler(this.LoadObjectBtn_Click);
             // 
-            // panel1
+            // SidePanel
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.panel1.Controls.Add(this.LoadObjectBtn);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(735, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 543);
-            this.panel1.TabIndex = 1;
+            this.SidePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.SidePanel.Controls.Add(this.LoadObjectBtn);
+            this.SidePanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.SidePanel.Location = new System.Drawing.Point(757, 0);
+            this.SidePanel.Name = "SidePanel";
+            this.SidePanel.Size = new System.Drawing.Size(200, 585);
+            this.SidePanel.TabIndex = 1;
             // 
-            // pictureBox1
+            // PBMain
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 92);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(717, 423);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-=======
-            this.Object3dPB = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.Object3dPB)).BeginInit();
-            this.SuspendLayout();
+            this.PBMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.PBMain.Location = new System.Drawing.Point(12, 44);
+            this.PBMain.Name = "PBMain";
+            this.PBMain.Size = new System.Drawing.Size(739, 423);
+            this.PBMain.TabIndex = 2;
+            this.PBMain.TabStop = false;
+            this.PBMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PBMain_MouseMove);
             // 
-            // Object3dPB
+            // PBFrontalView
             // 
-            this.Object3dPB.BackColor = System.Drawing.SystemColors.WindowText;
-            this.Object3dPB.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.Object3dPB.Location = new System.Drawing.Point(43, 131);
-            this.Object3dPB.Name = "Object3dPB";
-            this.Object3dPB.Size = new System.Drawing.Size(909, 479);
-            this.Object3dPB.TabIndex = 0;
-            this.Object3dPB.TabStop = false;
+            this.PBFrontalView.Location = new System.Drawing.Point(639, 402);
+            this.PBFrontalView.Name = "PBFrontalView";
+            this.PBFrontalView.Size = new System.Drawing.Size(100, 50);
+            this.PBFrontalView.TabIndex = 3;
+            this.PBFrontalView.TabStop = false;
             // 
-            // button1
+            // PBLateralView
             // 
-            this.button1.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(841, 73);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 32);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Open Object";
-            this.button1.UseVisualStyleBackColor = true;
->>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
+            this.PBLateralView.Location = new System.Drawing.Point(639, 335);
+            this.PBLateralView.Name = "PBLateralView";
+            this.PBLateralView.Size = new System.Drawing.Size(100, 50);
+            this.PBLateralView.TabIndex = 4;
+            this.PBLateralView.TabStop = false;
+            // 
+            // PBPlantView
+            // 
+            this.PBPlantView.Location = new System.Drawing.Point(639, 264);
+            this.PBPlantView.Name = "PBPlantView";
+            this.PBPlantView.Size = new System.Drawing.Size(100, 50);
+            this.PBPlantView.TabIndex = 5;
+            this.PBPlantView.TabStop = false;
+            // 
+            // labelMaterial
+            // 
+            this.labelMaterial.AutoSize = true;
+            this.labelMaterial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(0)))), ((int)(((byte)(55)))));
+            this.labelMaterial.Location = new System.Drawing.Point(713, 9);
+            this.labelMaterial.Name = "labelMaterial";
+            this.labelMaterial.Size = new System.Drawing.Size(38, 15);
+            this.labelMaterial.TabIndex = 6;
+            this.labelMaterial.Text = "label1";
+            // 
+            // labelAmbient
+            // 
+            this.labelAmbient.AutoSize = true;
+            this.labelAmbient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.labelAmbient.Location = new System.Drawing.Point(713, 26);
+            this.labelAmbient.Name = "labelAmbient";
+            this.labelAmbient.Size = new System.Drawing.Size(38, 15);
+            this.labelAmbient.TabIndex = 7;
+            this.labelAmbient.Text = "label1";
             // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-<<<<<<< HEAD
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
-            this.ClientSize = new System.Drawing.Size(935, 543);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(957, 585);
+            this.Controls.Add(this.labelAmbient);
+            this.Controls.Add(this.labelMaterial);
+            this.Controls.Add(this.PBPlantView);
+            this.Controls.Add(this.PBLateralView);
+            this.Controls.Add(this.PBFrontalView);
+            this.Controls.Add(this.PBMain);
+            this.Controls.Add(this.SidePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-=======
-            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.ClientSize = new System.Drawing.Size(987, 634);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.Object3dPB);
->>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
             this.Name = "MainView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "3D";
             this.Load += new System.EventHandler(this.MainView_Load);
-<<<<<<< HEAD
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-=======
-            ((System.ComponentModel.ISupportInitialize)(this.Object3dPB)).EndInit();
->>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
+            this.SidePanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PBMain)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBFrontalView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBLateralView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBPlantView)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-<<<<<<< HEAD
         private Button LoadObjectBtn;
-        private Panel panel1;
-        private PictureBox pictureBox1;
-=======
-        private PictureBox Object3dPB;
-        private Button button1;
->>>>>>> bbf9611bd8ac367d2642a2bb7ae5c41b3fac2b64
+        private Panel SidePanel;
+        private PictureBox PBMain;
+        private PictureBox PBFrontalView;
+        private PictureBox PBLateralView;
+        private PictureBox PBPlantView;
+        private Label labelMaterial;
+        private Label labelAmbient;
     }
 }

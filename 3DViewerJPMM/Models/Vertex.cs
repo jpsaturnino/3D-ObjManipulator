@@ -35,14 +35,14 @@ namespace _3DViewerJPMM.Models
             return new Vertex(this.x / d, this.y / d, this.z / d);
         }
         
-        private double getMagnitude()
+        private double GetMagnitude()
         {
             return Math.Sqrt(Math.Pow(this.x, 2) + Math.Pow(this.y, 2) + Math.Pow(this.z, 2));
         }
 
         public Vertex Normalize()
         {
-            double magnitude = getMagnitude();
+            double magnitude = GetMagnitude();
             if (magnitude == 0)
                 return new Vertex(1, 1, 1);
             return this.Division(magnitude);
