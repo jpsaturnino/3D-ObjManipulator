@@ -59,11 +59,6 @@ namespace _3DViewerJPMM
             }
         }
 
-        private void _KeyPress(object sender, KeyPressEventArgs e)
-        {
-            Debug.WriteLine
-        }
-
         private void CheckBoxFaces_CheckedChanged(object sender, EventArgs e)
         {
             showHiddenFaces = CheckBoxFaces.Checked;
