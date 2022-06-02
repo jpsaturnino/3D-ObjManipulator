@@ -10,14 +10,15 @@ namespace _3DViewerJPMM
         private Bitmap mainBitmap;
         private Draw draw;
         private int x1, y1, x2, y2, tx, ty;
-        private bool ctrlIsPressed;
+        private bool ctrlIsPressed, showHiddenFaces;
 
         public MainView() {
             InitializeComponent();
+            showHiddenFaces = false;
             PBMain.MouseWheel += new MouseEventHandler(PBMain_MouseWheel);
         }
 
-    private void LoadObjectBtn_Click(object sender, EventArgs e)
+        private void LoadObjectBtn_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.FileName = "";
@@ -27,14 +28,46 @@ namespace _3DViewerJPMM
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 obj = new _3DObject(openFileDialog.FileName);
-                // Redimensiona o obj de acordo com o tamanho da tela, para que fique proporcinal
-                // Isso => { pictureBox1.Width >> 2 ==> "pictureBox1.Width / 2" }
                 double s = (PBMain.Width >> 2) / Math.Abs(obj.MAX_X - obj.MIN_X);
-                // Realiza a escala a partir do obtido
                 obj.Scaling(s, s, s);
                 RefreshObject();
                 PBMain.Enabled = true;
             }
+        }
+
+        private void SelectColorBtn_Click(object sender, EventArgs e)
+        {
+            SetColor(ObjectBtnColor);
+        }
+
+        private void AmbientBtnColor_Click(object sender, EventArgs e)
+        {
+            SetColor(AmbientBtnColor);
+        }
+
+        private void SetColor(Button btn)
+        {
+            if (ColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                btn.BackColor = ColorDialog.Color;
+                if(btn.Text == "Cor Ambiente")
+                {
+                    draw.Paint(mainBitmap, AmbientBtnColor.BackColor);
+                    PBMain.Refresh();
+                }
+                RefreshObject();
+            }
+        }
+
+        private void _KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Debug.WriteLine
+        }
+
+        private void CheckBoxFaces_CheckedChanged(object sender, EventArgs e)
+        {
+            showHiddenFaces = CheckBoxFaces.Checked;
+            RefreshObject();
         }
 
         private double GrausToRadians(double graus) => graus * Math.PI / 180;
@@ -56,21 +89,22 @@ namespace _3DViewerJPMM
             y2 = e.Y;
             if (e.Button == MouseButtons.Left)
             {
-                if (false)
+                if (ctrlIsPressed)
                 {
+                    Debug.WriteLine("Movimentando em Z");
                     double angle = (Math.Abs(y2 - y1) > Math.Abs(x2 - x1)) ? -(y2 - y1) : x2 - x1;
-                    obj.RotationZ(GrausToRadians(angle), false);
+                    obj.RotationZ(GrausToRadians(angle), showHiddenFaces);
                 }
                 else
                 {
-                    obj.RotationX(GrausToRadians(-(y2 - y1)), false);
-                    obj.RotationY(GrausToRadians(x2 - x1), false);
+                    obj.RotationX(GrausToRadians(-(y2 - y1)), showHiddenFaces);
+                    obj.RotationY(GrausToRadians(x2 - x1), showHiddenFaces);
                 }
                 RefreshObject();
             }
-            else if (e.Button == MouseButtons.Right) // translada objeto
+            else if (e.Button == MouseButtons.Right)
             {
-                tx += x2 - x1;// obj.translacao((x2 - x1), (y2 - y1), 0);
+                tx += x2 - x1;
                 ty += y2 - y1;
                 RefreshObject();
             }
@@ -86,7 +120,7 @@ namespace _3DViewerJPMM
             {
                 Thread.Sleep(200);
                 mainBitmap = new Bitmap(PBMain.Width, PBMain.Height);
-                draw.paint(mainBitmap, labelAmbient.BackColor);
+                draw.Paint(mainBitmap, AmbientBtnColor.BackColor);
                 Invoke(new MethodInvoker(delegate ()
                 {
                     PBMain.Image = mainBitmap;
@@ -102,8 +136,8 @@ namespace _3DViewerJPMM
         {
             if(obj != null)
             {
-                draw.paint(mainBitmap, labelAmbient.BackColor);
-                draw.ParallelProjectionXY(mainBitmap, obj, tx, ty, labelMaterial.BackColor, false);
+                draw.Paint(mainBitmap, AmbientBtnColor.BackColor);
+                draw.ParallelProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
                 PBMain.Refresh();
             }
         }

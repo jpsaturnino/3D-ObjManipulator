@@ -51,6 +51,7 @@ namespace _3DViewerJPMM.Models
                     else if (z < minZ) minZ = z;
 
                     mainVertices.Add(new Vertex(x, y, z));
+                    currentVertices.Add(new Vertex(x, y, z));
                     currentFacesVertex.Add(new List<int>());
                 }
                 else if (line.StartsWith("f "))
@@ -64,51 +65,44 @@ namespace _3DViewerJPMM.Models
                         face.Add(index);
                         currentFacesVertex[index].Add(faces.Count);
                     }
-                    Debug.WriteLine("Adding face: " + face[0] + " " + face[1] + " " + face[2]);
                     faces.Add(face);
                 }
             }
-            //UpdateNormalVertices();
+            UpdateNormalFaces();
             Debug.WriteLine("3D object loaded!");
         }
 
         private void UpdateVertices()
         {
-            Debug.WriteLine("Updating vertices...");
             double[,] matrix;
             currentVertices.Clear();
             for (int i = 0; i < mainVertices.Count; i++)
             {
                 matrix = Multiply(MA, mainVertices[i].ToMatrix());
-                currentVertices.Add(new Vertex(matrix[0,0], matrix[1, 0], matrix[2, 0]));
+                currentVertices.Add(new Vertex(matrix[0, 0], matrix[1, 0], matrix[2, 0]));
             }
-            Debug.WriteLine("Vertices updated!");
         }
-                
+
         public void Scaling(double sx, double sy, double sz)
         {
-            Debug.WriteLine('\n' + "Scaling...");
             MA = Scale(sx, sy, sz, MA);
             UpdateVertices();
-            Debug.WriteLine("Scaling done!");
         }
-        
+
         public void Translation(double x, double y, double z)
         {
             MA = Translate(x, y, z, MA);
             UpdateVertices();
         }
-        
+
         public void RotationX(double angle, bool showHiddenFaces)
         {
-            Debug.WriteLine('\n' + "Rotating X...");
             MA = RotateX(angle, MA);
             UpdateVertices();
             if (!showHiddenFaces)
                 UpdateNormalFaces();
-            Debug.WriteLine("Rotating X done!");
         }
-        
+
         public void RotationY(double angle, bool showHiddenFaces)
         {
             MA = RotateY(angle, MA);
@@ -116,7 +110,7 @@ namespace _3DViewerJPMM.Models
             if (!showHiddenFaces)
                 UpdateNormalFaces();
         }
-        
+
         public void RotationZ(double angle, bool showHiddenFaces)
         {
             MA = RotateZ(angle, MA);
@@ -124,7 +118,7 @@ namespace _3DViewerJPMM.Models
             if (!showHiddenFaces)
                 UpdateNormalFaces();
         }
-        
+
         private void UpdateNormalFaces() /* da pra refatorar */
         {
             normalFaces = new Vertex[faces.Count];
@@ -140,12 +134,12 @@ namespace _3DViewerJPMM.Models
                 Vertex ac = c.Decrement(a);
                 normalFaces[i] = ab.CrossProduct(ac);
                 normalFaces[i].Normalize();
-            }            
+            }
         }
 
         private void UpdateNormalVertices() /* refatorada, se der merda refaz */
         {
-            for(int i = 0; i < normalVertices.Length; i++)
+            for (int i = 0; i < normalVertices.Length; i++)
             {
                 normalVertices[i] = new Vertex(0, 0, 0);
                 for (int j = 0; j < currentFacesVertex[i].Count; j++)
@@ -155,7 +149,7 @@ namespace _3DViewerJPMM.Models
                 normalVertices[i].Normalize();
             }
         }
-        
+
         public double MAX_X { get => (int)Math.Round(maxX); set => maxX = value; }
 
         public double MAX_Y { get => (int)Math.Round(maxY); set => maxY = value; }
@@ -170,10 +164,7 @@ namespace _3DViewerJPMM.Models
 
         public Vertex[] NormalFaces { get => normalFaces; set => normalFaces = value; }
 
-        public Vertex NormalFaceAt(int index)
-        {
-            return normalFaces[index];
-        }
+        public Vertex NormalFaceAt(int index) { return normalFaces[index]; }
 
         public Vertex[] NormalVertices { get => normalVertices; set => normalVertices = value; }
 

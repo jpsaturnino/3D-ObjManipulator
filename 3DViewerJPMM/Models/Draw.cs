@@ -9,8 +9,11 @@ namespace _3DViewerJPMM.Models
     {
         private const double piNumber = Math.PI;
         private int CX, CY;
-        
-        public void ParallelProjectionXY(Bitmap bmp, _3DObject obj, int tx, int ty, Color corlinha, bool rmFacesOcultas)
+
+        /*
+         * Projeção paralela no plano XY 
+         */
+        public void ParallelProjectionXY(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -20,22 +23,25 @@ namespace _3DViewerJPMM.Models
                 CY = ty;
                 List<List<int>> faces = obj.Faces;
                 List<Vertex> vertices = obj.CurrentVertices;
-                if (rmFacesOcultas)
+                if (showHiddenFaces)
                 {
                     for (int idf = 0; idf < faces.Count; ++idf)
-                        if (obj.NormalFaceAt(idf).Z >= 0.0)
-                            ParallelProjectionFaceXY(data, faces[idf], vertices, corlinha);
+                        ParallelProjectionFaceXY(data, faces[idf], vertices, lineColor);
                 }
                 else
                 {
                     for (int idf = 0; idf < faces.Count; ++idf)
-                        ParallelProjectionFaceXY(data, faces[idf], vertices, corlinha);
+                        if (obj.NormalFaceAt(idf).Z >= 0.0)
+                            ParallelProjectionFaceXY(data, faces[idf], vertices, lineColor);
                 }
             }
             bmp.UnlockBits(data);
         }
 
-        private unsafe void ParallelProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color cor)
+        /*
+         * Projeção paralela da face no plano XY 
+         */
+        private unsafe void ParallelProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color color)
         {
             Vertex p1, p2;
             int i;
@@ -43,109 +49,144 @@ namespace _3DViewerJPMM.Models
             {
                 p1 = vertices[f[i]];
                 p2 = vertices[f[i + 1]];
-                Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, cor);
+                Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, color);
             }
             i = f.Count - 1;
             p1 = vertices[f[i]];
             p2 = vertices[f[0]];
-            Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, cor);
+            Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, color);
         }
 
         private unsafe void Bresenham(BitmapData data, int x1, int y1, int x2, int y2,
-            Color cor)
+            Color color)
         {
-            int dx = x2 - x1, x, y;
-            int dy = y2 - y1;
+            int deltaX = x2 - x1, x, y; // delta x
+            int deltaY = y2 - y1; // delta y
             int declive = 1;
-            int incE, incNE, d;
-            if (Math.Abs(dx) > Math.Abs(dy))
-            { // for de x
+            int incE, incNE, d; // incrementos
+            if (Math.Abs(deltaX) > Math.Abs(deltaY))
+            {
+                // mais distante em x
                 if (x1 > x2)
                 { 
-                    Bresenham(data, x2, y2, x1, y1, cor);
+                    Bresenham(data, x2, y2, x1, y1, color);
                     return;
                 }
+
                 if (y1 > y2)
-                {   // pintar (x,-y)
+                {   
                     declive = -1;
-                    dy = -dy;
+                    deltaY = -deltaY;
                 }
-                // definindo constantes de Bresenham para abs(dx) > abs(dy)
-                incE = 2 * dy;
-                incNE = 2 * (dy - dx);
+                
+                // definindo constantes para abs(dx) > abs(dy)
+                incE = 2 * deltaY;
+                incNE = 2 * (deltaY - deltaX);
                 d = incNE;
 
                 y = y1;
+                // desenha
                 for (x = x1; x <= x2; ++x)
                 {
-                    if (InImage(data, x, y))
-                        WritePixel(data, x, y, cor);
-                    if (d < 0) // escolhe incE
-                        d += incE;
+                    if (InImage(data, x, y)) WritePixel(data, x, y, color);
+                    
+                    if (d < 0) d += incE;
                     else
-                    {   // escolhe incNE
+                    {
                         d += incNE;
                         y += declive;
                     }
                 }
-            } // fim abs(dx) > abs(dy)
+            }
             else
-            { // abs(dx) <= abs(dy)
-              // for de y
+            {   
+                // mais distante em y
                 if (y1 > y2)
-                { // trocar ponto p1 por p2
-                    /*
-                     * chamada recursiva trocando pontos
-                     * para que todas a perguntas iniciais
-                     * sejam feitas novamente
-                     */
-                    Bresenham(data, x2, y2, x1, y1, cor);
+                {
+                    Bresenham(data, x2, y2, x1, y1, color);
                     return;
                 }
+
                 if (x1 > x2)
-                {   // pintar (x,-y)
+                {  
                     declive = -1;
-                    dx = -dx;
+                    deltaX = -deltaX;
                 }
-                // definindo constantes de Bresenham para abs(dx) <= abs(dy)
-                incE = 2 * dx;
-                incNE = 2 * (dx - dy);
+                // definindo constantes para abs(dx) <= abs(dy)
+                incE = 2 * deltaX;
+                incNE = 2 * (deltaX - deltaY);
                 d = incNE;
 
                 x = x1;
                 for (y = y1; y <= y2; ++y)
                 {
-                    if (InImage(data, x, y))
-                        WritePixel(data, x, y, cor);
-                    if (d < 0) // escolhe incE
-                        d += incE;
+                    if (InImage(data, x, y)) WritePixel(data, x, y, color);
+                    
+                    if (d < 0) d += incE;
                     else
-                    {   // escolhe incNE
+                    {
                         d += incNE;
                         x += declive;
                     }
                 }
-            } // abs(dx) <= abs(dy)
+            }
         }
 
+        /* 
+         * verifica se o pixel (x,y) esta dentro da imagem
+         * retorna true se estiver, false caso contrario
+         */
         private bool InImage(BitmapData data, int x, int y)
         {
             return x >= 0 && x < data.Width && y >= 0 && y < data.Height;
         }
 
-        private void WritePixel(BitmapData data, int x, int y, Color cor)
+        /* 
+         * escreve o pixel (x,y) na imagem
+         */
+        private void WritePixel(BitmapData data, int x, int y, Color color)
         {
             unsafe
             {
-                byte* p = (byte*)data.Scan0;
+                byte* p = (byte*)data.Scan0; // ponteiro para o inicio da imagem
                 p += y * data.Stride + x * 3;
-                *p = cor.B;
-                *(p + 1) = cor.G;
-                *(p + 2) = cor.R;
+                *p = color.B;
+                *(p + 1) = color.G;
+                *(p + 2) = color.R;
             }
         }
-        
-        public void paint(Bitmap bmp, Color cor)
+
+        public void Paint(Bitmap bmp, Color color)
+        {
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            unsafe
+            {
+                byte* p = (byte*)data.Scan0;
+                for (int i = 0; i < data.Height; ++i)
+                {
+                    /*
+                     * ponteiro para o inicio da linha
+                     * p += data.Stride: avança para o inicio da proxima linha
+                     */
+                    for (int j = 0; j < data.Width; ++j)
+                    {
+                        /* 
+                         * ponteiro para o pixel da linha
+                         * p += 3: avança para o pixel da proxima coluna
+                         */
+                        *p = color.B;
+                        *(p + 1) = color.G;
+                        *(p + 2) = color.R;
+                        p += 3;
+                    }
+                    p += data.Stride - data.Width * 3;
+                }
+            }
+            bmp.UnlockBits(data);
+        }
+        /*
+        public void paint(Bitmap bmp, Color color)
         {
 
             // lock dados
@@ -161,9 +202,9 @@ namespace _3DViewerJPMM.Models
                 {
                     for (x = 0; x < width; ++x)
                     {
-                        *(aux++) = cor.B;
-                        *(aux++) = cor.G;
-                        *(aux++) = cor.R;
+                        *(aux++) = color.B;
+                        *(aux++) = color.G;
+                        *(aux++) = color.R;
                     }
                     aux += padding;
                 }
@@ -172,5 +213,6 @@ namespace _3DViewerJPMM.Models
             // unluck dados
             bmp.UnlockBits(bmpdata);
         }// fim paint
+        */
     }
 }
