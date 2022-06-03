@@ -11,11 +11,13 @@ namespace _3DViewerJPMM
         private Draw draw;
         private int x1, y1, x2, y2, tx, ty;
         private bool ctrlIsPressed, showHiddenFaces;
+        private string selectedPerspective;
 
         public MainView() {
             InitializeComponent();
             showHiddenFaces = false;
             PBMain.MouseWheel += new MouseEventHandler(PBMain_MouseWheel);
+            rbParallel.Checked = true;
         }
 
         private void LoadObjectBtn_Click(object sender, EventArgs e)
@@ -57,6 +59,43 @@ namespace _3DViewerJPMM
                 }
                 RefreshObject();
             }
+        }
+
+        private void rbParallel_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeRadioBtnColor(rbParallel);
+            selectedPerspective = "Parallel";
+            RefreshObject();
+        }
+
+        private void rbCabinet_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeRadioBtnColor(rbCabinet);
+            selectedPerspective = "Cabinet";
+            RefreshObject();
+        }
+
+        private void rbCavalier_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeRadioBtnColor(rbCavalier);
+            selectedPerspective = "Cavalier";
+            RefreshObject();
+        }
+
+        private void rbPerspective_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeRadioBtnColor(rbPerspective);
+            selectedPerspective = "Perspective";
+            RefreshObject();
+        }
+
+        private void ChangeRadioBtnColor(RadioButton rb)
+        {
+            rbParallel.ForeColor = Color.White;
+            rbCabinet.ForeColor = Color.White;
+            rbCavalier.ForeColor = Color.White;
+            rbPerspective.ForeColor = Color.White;
+            rb.ForeColor = ObjectBtnColor.BackColor;
         }
 
         private void CheckBoxFaces_CheckedChanged(object sender, EventArgs e)
@@ -132,7 +171,18 @@ namespace _3DViewerJPMM
             if(obj != null)
             {
                 draw.Paint(mainBitmap, AmbientBtnColor.BackColor);
-                draw.ParallelProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
+                switch (selectedPerspective)
+                {
+                    case "Cabinet":
+                        break;
+                    case "Cavalier":
+                        break;
+                    case "Perspective":
+                        break;
+                    default:
+                        draw.ParallelProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
+                        break;
+                }
                 PBMain.Refresh();
             }
         }

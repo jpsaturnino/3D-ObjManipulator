@@ -30,6 +30,11 @@
         {
             this.LoadObjectBtn = new System.Windows.Forms.Button();
             this.SidePanel = new System.Windows.Forms.Panel();
+            this.rbPerspective = new System.Windows.Forms.RadioButton();
+            this.rbCavalier = new System.Windows.Forms.RadioButton();
+            this.rbCabinet = new System.Windows.Forms.RadioButton();
+            this.rbParallel = new System.Windows.Forms.RadioButton();
+            this.labelProjections = new System.Windows.Forms.Label();
             this.CheckBoxFaces = new System.Windows.Forms.CheckBox();
             this.PBMain = new System.Windows.Forms.PictureBox();
             this.PBFrontalView = new System.Windows.Forms.PictureBox();
@@ -38,9 +43,9 @@
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.ObjectBtnColor = new System.Windows.Forms.Button();
             this.AmbientBtnColor = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.plantView = new System.Windows.Forms.Label();
+            this.sideView = new System.Windows.Forms.Label();
+            this.frontView = new System.Windows.Forms.Label();
             this.SidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBFrontalView)).BeginInit();
@@ -67,6 +72,11 @@
             // SidePanel
             // 
             this.SidePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.SidePanel.Controls.Add(this.rbPerspective);
+            this.SidePanel.Controls.Add(this.rbCavalier);
+            this.SidePanel.Controls.Add(this.rbCabinet);
+            this.SidePanel.Controls.Add(this.rbParallel);
+            this.SidePanel.Controls.Add(this.labelProjections);
             this.SidePanel.Controls.Add(this.CheckBoxFaces);
             this.SidePanel.Controls.Add(this.LoadObjectBtn);
             this.SidePanel.Dock = System.Windows.Forms.DockStyle.Right;
@@ -74,6 +84,73 @@
             this.SidePanel.Name = "SidePanel";
             this.SidePanel.Size = new System.Drawing.Size(200, 585);
             this.SidePanel.TabIndex = 1;
+            // 
+            // rbPerspective
+            // 
+            this.rbPerspective.AutoSize = true;
+            this.rbPerspective.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbPerspective.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.rbPerspective.Location = new System.Drawing.Point(22, 105);
+            this.rbPerspective.Name = "rbPerspective";
+            this.rbPerspective.Size = new System.Drawing.Size(101, 22);
+            this.rbPerspective.TabIndex = 17;
+            this.rbPerspective.TabStop = true;
+            this.rbPerspective.Text = "Perspectiva";
+            this.rbPerspective.UseVisualStyleBackColor = true;
+            this.rbPerspective.CheckedChanged += new System.EventHandler(this.rbPerspective_CheckedChanged);
+            // 
+            // rbCavalier
+            // 
+            this.rbCavalier.AutoSize = true;
+            this.rbCavalier.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbCavalier.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.rbCavalier.Location = new System.Drawing.Point(22, 64);
+            this.rbCavalier.Name = "rbCavalier";
+            this.rbCavalier.Size = new System.Drawing.Size(84, 22);
+            this.rbCavalier.TabIndex = 16;
+            this.rbCavalier.TabStop = true;
+            this.rbCavalier.Text = "Cavaleira";
+            this.rbCavalier.UseVisualStyleBackColor = true;
+            this.rbCavalier.CheckedChanged += new System.EventHandler(this.rbCavalier_CheckedChanged);
+            // 
+            // rbCabinet
+            // 
+            this.rbCabinet.AutoSize = true;
+            this.rbCabinet.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbCabinet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.rbCabinet.Location = new System.Drawing.Point(22, 44);
+            this.rbCabinet.Name = "rbCabinet";
+            this.rbCabinet.Size = new System.Drawing.Size(77, 22);
+            this.rbCabinet.TabIndex = 15;
+            this.rbCabinet.TabStop = true;
+            this.rbCabinet.Text = "Cabinet";
+            this.rbCabinet.UseVisualStyleBackColor = true;
+            this.rbCabinet.CheckedChanged += new System.EventHandler(this.rbCabinet_CheckedChanged);
+            // 
+            // rbParallel
+            // 
+            this.rbParallel.AutoSize = true;
+            this.rbParallel.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbParallel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.rbParallel.Location = new System.Drawing.Point(22, 84);
+            this.rbParallel.Name = "rbParallel";
+            this.rbParallel.Size = new System.Drawing.Size(77, 22);
+            this.rbParallel.TabIndex = 14;
+            this.rbParallel.TabStop = true;
+            this.rbParallel.Text = "Paralela";
+            this.rbParallel.UseVisualStyleBackColor = true;
+            this.rbParallel.CheckedChanged += new System.EventHandler(this.rbParallel_CheckedChanged);
+            // 
+            // labelProjections
+            // 
+            this.labelProjections.AutoSize = true;
+            this.labelProjections.Font = new System.Drawing.Font("Montserrat ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelProjections.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.labelProjections.Location = new System.Drawing.Point(13, 18);
+            this.labelProjections.Name = "labelProjections";
+            this.labelProjections.Size = new System.Drawing.Size(95, 22);
+            this.labelProjections.TabIndex = 13;
+            this.labelProjections.Text = "Projeções";
             // 
             // CheckBoxFaces
             // 
@@ -152,35 +229,35 @@
             this.AmbientBtnColor.UseVisualStyleBackColor = false;
             this.AmbientBtnColor.Click += new System.EventHandler(this.AmbientBtnColor_Click);
             // 
-            // label1
+            // plantView
             // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.label1.Location = new System.Drawing.Point(659, 340);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 15);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Vista planta";
+            this.plantView.AutoSize = true;
+            this.plantView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.plantView.Location = new System.Drawing.Point(659, 340);
+            this.plantView.Name = "plantView";
+            this.plantView.Size = new System.Drawing.Size(68, 15);
+            this.plantView.TabIndex = 10;
+            this.plantView.Text = "Vista planta";
             // 
-            // label2
+            // sideView
             // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.label2.Location = new System.Drawing.Point(659, 420);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 15);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Vista lateral";
+            this.sideView.AutoSize = true;
+            this.sideView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.sideView.Location = new System.Drawing.Point(659, 420);
+            this.sideView.Name = "sideView";
+            this.sideView.Size = new System.Drawing.Size(67, 15);
+            this.sideView.TabIndex = 11;
+            this.sideView.Text = "Vista lateral";
             // 
-            // label3
+            // frontView
             // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.label3.Location = new System.Drawing.Point(659, 499);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(70, 15);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Vista frontal";
+            this.frontView.AutoSize = true;
+            this.frontView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.frontView.Location = new System.Drawing.Point(659, 499);
+            this.frontView.Name = "frontView";
+            this.frontView.Size = new System.Drawing.Size(70, 15);
+            this.frontView.TabIndex = 12;
+            this.frontView.Text = "Vista frontal";
             // 
             // MainView
             // 
@@ -188,9 +265,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.ClientSize = new System.Drawing.Size(957, 585);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.frontView);
+            this.Controls.Add(this.sideView);
+            this.Controls.Add(this.plantView);
             this.Controls.Add(this.AmbientBtnColor);
             this.Controls.Add(this.ObjectBtnColor);
             this.Controls.Add(this.PBPlantView);
@@ -203,7 +280,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "3D";
             this.Load += new System.EventHandler(this.MainView_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this._KeyPress);
             this.SidePanel.ResumeLayout(false);
             this.SidePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBMain)).EndInit();
@@ -226,9 +302,14 @@
         private ColorDialog ColorDialog;
         private Button ObjectBtnColor;
         private Button AmbientBtnColor;
-        private Label label1;
-        private Label label2;
-        private Label label3;
+        private Label plantView;
+        private Label sideView;
+        private Label frontView;
         private CheckBox CheckBoxFaces;
+        private Label labelProjections;
+        private RadioButton rbParallel;
+        private RadioButton rbPerspective;
+        private RadioButton rbCavalier;
+        private RadioButton rbCabinet;
     }
 }
