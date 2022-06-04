@@ -57,35 +57,82 @@ namespace _3DViewerJPMM.Models
             Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, color);
         }
 
-        private unsafe void Bresenham(BitmapData data, int x1, int y1, int x2, int y2,
-            Color color)
+        public void PerspectiveProjectionXY(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, double fov= -1000)
         {
-            int deltaX = x2 - x1, x, y; // delta x
-            int deltaY = y2 - y1; // delta y
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            unsafe
+            {
+                CX = tx;
+                CY = ty;
+                List<List<int>> faces = obj.Faces;
+                List<Vertex> vertices = obj.CurrentVertices;
+                if (showHiddenFaces)
+                {
+                    for (int idf = 0; idf < faces.Count; ++idf)
+                        PerspectiveProjectionFaceXY(data, faces[idf], vertices, lineColor, fov);
+                }
+                else
+                {
+                    for (int idf = 0; idf < faces.Count; ++idf)
+                        if (obj.NormalFaceAt(idf).Z >= 0.0)
+                            PerspectiveProjectionFaceXY(data, faces[idf], vertices, lineColor, fov);
+                }
+            }
+            bmp.UnlockBits(data);
+        }
+
+        private unsafe void PerspectiveProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color color, double fov)
+        {
+            Vertex p1, p2;
+            int i;
+            double x1, y1, z1, x2, y2, z2;
+            for (i = 0; i + 1 < f.Count; ++i)
+            {
+                p1 = vertices[f[i]];
+                p2 = vertices[f[i + 1]];
+                x1 = p1.X; y1 = p1.Y; z1 = p1.Z;
+                x2 = p2.X; y2 = p2.Y; z2 = p2.Z;
+                x1 = x1 * fov / (z1 += fov);
+                y1 = y1 * fov / z1;
+                x2 = x2 * fov / (z2 += fov);
+                y2 = y2 * fov / z2;
+                Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, color);
+            }
+            i = f.Count - 1;
+            p1 = vertices[f[i]];
+            p2 = vertices[f[0]];
+            x1 = p1.X; y1 = p1.Y; z1 = p1.Z;
+            x2 = p2.X; y2 = p2.Y; z2 = p2.Z;
+            x1 = x1 * fov / (z1 += fov);
+            y1 = y1 * fov / z1;
+            x2 = x2 * fov / (z2 += fov);
+            y2 = y2 * fov / z2;
+            Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, color);
+        }
+
+        private unsafe void Bresenham(BitmapData data, int x1, int y1, int x2, int y2, Color color)
+        {
+            int deltaX = x2 - x1, x, y;
+            int deltaY = y2 - y1;
             int declive = 1;
-            int incE, incNE, d; // incrementos
+            int incE, incNE, d; 
             if (Math.Abs(deltaX) > Math.Abs(deltaY))
             {
                 // mais distante em x
-                if (x1 > x2)
-                { 
-                    Bresenham(data, x2, y2, x1, y1, color);
-                    return;
-                }
-
-                if (y1 > y2)
+                if (x1 > x2) Bresenham(data, x2, y2, x1, y1, color);
+                
+                if (y1 > y2 && x1 < x2)
                 {   
                     declive = -1;
                     deltaY = -deltaY;
                 }
                 
-                // definindo constantes para abs(dx) > abs(dy)
                 incE = 2 * deltaY;
                 incNE = 2 * (deltaY - deltaX);
                 d = incNE;
 
                 y = y1;
-                // desenha
                 for (x = x1; x <= x2; ++x)
                 {
                     if (InImage(data, x, y)) WritePixel(data, x, y, color);
@@ -101,18 +148,14 @@ namespace _3DViewerJPMM.Models
             else
             {   
                 // mais distante em y
-                if (y1 > y2)
-                {
-                    Bresenham(data, x2, y2, x1, y1, color);
-                    return;
-                }
+                if (y1 > y2) Bresenham(data, x2, y2, x1, y1, color);
 
-                if (x1 > x2)
+                if (x1 > x2 && y1 < y2)
                 {  
                     declive = -1;
                     deltaX = -deltaX;
                 }
-                // definindo constantes para abs(dx) <= abs(dy)
+                
                 incE = 2 * deltaX;
                 incNE = 2 * (deltaX - deltaY);
                 d = incNE;

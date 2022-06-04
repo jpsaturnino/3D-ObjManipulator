@@ -173,10 +173,12 @@ namespace _3DViewerJPMM
                 switch (selectedPerspective)
                 {
                     case "Cabinet":
+                        
                         break;
                     case "Cavalier":
                         break;
                     case "Perspective":
+                        draw.PerspectiveProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
                         break;
                     default:
                         draw.ParallelProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
