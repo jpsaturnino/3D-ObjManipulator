@@ -10,7 +10,7 @@ namespace _3DViewerJPMM
         private Bitmap mainBitmap;
         private Draw draw;
         private int x1, y1, x2, y2, tx, ty;
-        private bool ctrlIsPressed, showHiddenFaces;
+        private bool showHiddenFaces;
         private string selectedPerspective;
 
         public MainView() {
@@ -98,6 +98,7 @@ namespace _3DViewerJPMM
             rb.ForeColor = ObjectBtnColor.BackColor;
         }
 
+
         private void CheckBoxFaces_CheckedChanged(object sender, EventArgs e)
         {
             showHiddenFaces = CheckBoxFaces.Checked;
@@ -121,27 +122,25 @@ namespace _3DViewerJPMM
         {
             x2 = e.X;
             y2 = e.Y;
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left) // if the mouseleft has been pressed
             {
-                if (ctrlIsPressed)
-                {
-                    Debug.WriteLine("Movimentando em Z");
-                    double angle = (Math.Abs(y2 - y1) > Math.Abs(x2 - x1)) ? -(y2 - y1) : x2 - x1;
-                    obj.RotationZ(GrausToRadians(angle), showHiddenFaces);
-                }
-                else
-                {
-                    obj.RotationX(GrausToRadians(-(y2 - y1)), showHiddenFaces);
-                    obj.RotationY(GrausToRadians(x2 - x1), showHiddenFaces);
-                }
+                obj.RotationX(GrausToRadians(-(y2 - y1)), showHiddenFaces);
+                obj.RotationY(GrausToRadians(x2 - x1), showHiddenFaces);
                 RefreshObject();
             }
-            else if (e.Button == MouseButtons.Right)
+            else if (e.Button == MouseButtons.Right) // if the mouseright has been pressed
             {
                 tx += x2 - x1;
                 ty += y2 - y1;
                 RefreshObject();
             }
+            else if (e.Button == MouseButtons.Middle){
+                double g = (Math.Abs(y2 - y1) > Math.Abs(x2 - x1)) ? -(y2 - y1) : x2 - x1;
+                obj.RotationZ(GrausToRadians(g), showHiddenFaces);
+                RefreshObject();
+
+            }
+
             x1 = x2;
             y1 = y2;
         }

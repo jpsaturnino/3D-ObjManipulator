@@ -59,7 +59,7 @@
             this.LoadObjectBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.LoadObjectBtn.FlatAppearance.BorderSize = 0;
             this.LoadObjectBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoadObjectBtn.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.LoadObjectBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.LoadObjectBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.LoadObjectBtn.Location = new System.Drawing.Point(0, 556);
             this.LoadObjectBtn.Name = "LoadObjectBtn";
@@ -88,11 +88,11 @@
             // rbPerspective
             // 
             this.rbPerspective.AutoSize = true;
-            this.rbPerspective.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbPerspective.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbPerspective.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.rbPerspective.Location = new System.Drawing.Point(22, 105);
             this.rbPerspective.Name = "rbPerspective";
-            this.rbPerspective.Size = new System.Drawing.Size(101, 22);
+            this.rbPerspective.Size = new System.Drawing.Size(97, 20);
             this.rbPerspective.TabIndex = 17;
             this.rbPerspective.TabStop = true;
             this.rbPerspective.Text = "Perspectiva";
@@ -102,11 +102,11 @@
             // rbCavalier
             // 
             this.rbCavalier.AutoSize = true;
-            this.rbCavalier.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbCavalier.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbCavalier.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.rbCavalier.Location = new System.Drawing.Point(22, 64);
             this.rbCavalier.Name = "rbCavalier";
-            this.rbCavalier.Size = new System.Drawing.Size(84, 22);
+            this.rbCavalier.Size = new System.Drawing.Size(83, 20);
             this.rbCavalier.TabIndex = 16;
             this.rbCavalier.TabStop = true;
             this.rbCavalier.Text = "Cavaleira";
@@ -116,11 +116,11 @@
             // rbCabinet
             // 
             this.rbCabinet.AutoSize = true;
-            this.rbCabinet.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbCabinet.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbCabinet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.rbCabinet.Location = new System.Drawing.Point(22, 44);
             this.rbCabinet.Name = "rbCabinet";
-            this.rbCabinet.Size = new System.Drawing.Size(77, 22);
+            this.rbCabinet.Size = new System.Drawing.Size(71, 20);
             this.rbCabinet.TabIndex = 15;
             this.rbCabinet.TabStop = true;
             this.rbCabinet.Text = "Cabinet";
@@ -130,11 +130,11 @@
             // rbParallel
             // 
             this.rbParallel.AutoSize = true;
-            this.rbParallel.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.rbParallel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbParallel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.rbParallel.Location = new System.Drawing.Point(22, 84);
             this.rbParallel.Name = "rbParallel";
-            this.rbParallel.Size = new System.Drawing.Size(77, 22);
+            this.rbParallel.Size = new System.Drawing.Size(76, 20);
             this.rbParallel.TabIndex = 14;
             this.rbParallel.TabStop = true;
             this.rbParallel.Text = "Paralela";
@@ -144,11 +144,11 @@
             // labelProjections
             // 
             this.labelProjections.AutoSize = true;
-            this.labelProjections.Font = new System.Drawing.Font("Montserrat ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelProjections.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelProjections.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.labelProjections.Location = new System.Drawing.Point(13, 18);
             this.labelProjections.Name = "labelProjections";
-            this.labelProjections.Size = new System.Drawing.Size(95, 22);
+            this.labelProjections.Size = new System.Drawing.Size(88, 20);
             this.labelProjections.TabIndex = 13;
             this.labelProjections.Text = "Projeções";
             // 
@@ -157,11 +157,11 @@
             this.CheckBoxFaces.AutoSize = true;
             this.CheckBoxFaces.FlatAppearance.BorderSize = 0;
             this.CheckBoxFaces.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CheckBoxFaces.Font = new System.Drawing.Font("Montserrat", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CheckBoxFaces.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CheckBoxFaces.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.CheckBoxFaces.Location = new System.Drawing.Point(22, 528);
             this.CheckBoxFaces.Name = "CheckBoxFaces";
-            this.CheckBoxFaces.Size = new System.Drawing.Size(157, 22);
+            this.CheckBoxFaces.Size = new System.Drawing.Size(150, 20);
             this.CheckBoxFaces.TabIndex = 1;
             this.CheckBoxFaces.Text = "Mostrar faces ocultas";
             this.CheckBoxFaces.UseVisualStyleBackColor = true;
@@ -206,7 +206,7 @@
             this.ObjectBtnColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(0)))), ((int)(((byte)(55)))));
             this.ObjectBtnColor.FlatAppearance.BorderSize = 0;
             this.ObjectBtnColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ObjectBtnColor.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ObjectBtnColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ObjectBtnColor.Location = new System.Drawing.Point(579, 18);
             this.ObjectBtnColor.Name = "ObjectBtnColor";
             this.ObjectBtnColor.Size = new System.Drawing.Size(74, 20);
@@ -220,7 +220,7 @@
             this.AmbientBtnColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.AmbientBtnColor.FlatAppearance.BorderSize = 0;
             this.AmbientBtnColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AmbientBtnColor.Font = new System.Drawing.Font("Montserrat", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.AmbientBtnColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.AmbientBtnColor.Location = new System.Drawing.Point(659, 18);
             this.AmbientBtnColor.Name = "AmbientBtnColor";
             this.AmbientBtnColor.Size = new System.Drawing.Size(92, 20);
