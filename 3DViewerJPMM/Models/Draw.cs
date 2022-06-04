@@ -7,7 +7,6 @@ namespace _3DViewerJPMM.Models
 
     internal class Draw
     {
-        private const double piNumber = Math.PI;
         private int CX, CY;
 
         /*
@@ -68,47 +67,80 @@ namespace _3DViewerJPMM.Models
                 List<List<int>> faces = obj.Faces;
                 List<Vertex> vertices = obj.CurrentVertices;
                 if (showHiddenFaces)
-                {
                     for (int idf = 0; idf < faces.Count; ++idf)
                         PerspectiveProjectionFaceXY(data, faces[idf], vertices, lineColor, fov);
-                }
                 else
-                {
                     for (int idf = 0; idf < faces.Count; ++idf)
                         if (obj.NormalFaceAt(idf).Z >= 0.0)
                             PerspectiveProjectionFaceXY(data, faces[idf], vertices, lineColor, fov);
-                }
             }
             bmp.UnlockBits(data);
         }
 
         private unsafe void PerspectiveProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color color, double fov)
         {
-            Vertex p1, p2;
+            Vertex v1, v2;
             int i;
             double x1, y1, z1, x2, y2, z2;
             for (i = 0; i + 1 < f.Count; ++i)
             {
-                p1 = vertices[f[i]];
-                p2 = vertices[f[i + 1]];
-                x1 = p1.X; y1 = p1.Y; z1 = p1.Z;
-                x2 = p2.X; y2 = p2.Y; z2 = p2.Z;
+                v1 = vertices[f[i]];
+                if (i == f.Count - 1)
+                    v2 = vertices[f[0]];
+                else
+                    v2 = vertices[f[i + 1]];
+                x1 = v1.X; y1 = v1.Y; z1 = v1.Z;
+                x2 = v2.X; y2 = v2.Y; z2 = v2.Z;
                 x1 = x1 * fov / (z1 += fov);
                 y1 = y1 * fov / z1;
                 x2 = x2 * fov / (z2 += fov);
                 y2 = y2 * fov / z2;
                 Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, color);
             }
-            i = f.Count - 1;
-            p1 = vertices[f[i]];
-            p2 = vertices[f[0]];
-            x1 = p1.X; y1 = p1.Y; z1 = p1.Z;
-            x2 = p2.X; y2 = p2.Y; z2 = p2.Z;
-            x1 = x1 * fov / (z1 += fov);
-            y1 = y1 * fov / z1;
-            x2 = x2 * fov / (z2 += fov);
-            y2 = y2 * fov / z2;
-            Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, color);
+        }
+        
+        public void ObliqueProjection(Bitmap bmp, _3DObject obj, int tx, int ty, Color cor, bool showHiddenFaces, double L)
+        {
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            unsafe
+            {
+                CX = tx;
+                CY = ty;
+                List<List<int>> faces = obj.Faces;
+                List<Vertex> vertices = obj.CurrentVertices;
+                if (showHiddenFaces)
+                    for (int idf = 0; idf < faces.Count; ++idf)
+                        ObliqueProjectionFaceXY(data, faces[idf], vertices, L, cor);                    
+                else
+                    for (int idf = 0; idf < faces.Count; ++idf)
+                        if (obj.NormalFaceAt(idf).Y <= 0.0)
+                            ObliqueProjectionFaceXY(data, faces[idf], vertices, L, cor);
+            }
+            bmp.UnlockBits(data);
+        }
+
+        private void ObliqueProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, double L, Color cor)
+        {
+            Vertex v1, v2;
+            int i;
+            double x1, y1, x2, y2;
+            double alpha = (Math.PI * 45) / 180;
+            double cosh = Math.Cos(alpha), sinh = Math.Sin(alpha);
+            double coshL = L * cosh, sinhL = L * sinh;
+            for (i = 0; i < f.Count; ++i)
+            {
+                v1 = vertices[f[i]];
+                if (i == f.Count - 1)
+                    v2 = vertices[f[0]];
+                else
+                    v2 = vertices[f[i + 1]];
+                x1 = (v1.X + v1.Z) * coshL;
+                y1 = (v1.Y + v1.Z) * sinhL;
+                x2 = (v2.X + v2.Z) * coshL;
+                y2 = (v2.Y + v2.Z) * sinhL;
+                Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, cor);
+            }
         }
 
         private unsafe void Bresenham(BitmapData data, int x1, int y1, int x2, int y2, Color color)

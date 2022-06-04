@@ -1,6 +1,7 @@
 
 using _3DViewerJPMM.Models;
 using System.Diagnostics;
+using static _3DViewerJPMM.Utils.Helper;
 
 namespace _3DViewerJPMM
 {
@@ -18,6 +19,7 @@ namespace _3DViewerJPMM
             showHiddenFaces = false;
             PBMain.MouseWheel += new MouseEventHandler(PBMain_MouseWheel);
             rbParallel.Checked = true;
+            CheckBoxFaces.AutoCheck = true;
         }
 
         private void LoadObjectBtn_Click(object sender, EventArgs e)
@@ -98,16 +100,13 @@ namespace _3DViewerJPMM
             rb.ForeColor = ObjectBtnColor.BackColor;
         }
 
-
         private void CheckBoxFaces_CheckedChanged(object sender, EventArgs e)
         {
             showHiddenFaces = CheckBoxFaces.Checked;
             RefreshObject();
         }
 
-        private double GrausToRadians(double graus) => graus * Math.PI / 180;
-
-        private void PBMain_MouseWheel(Object sender, MouseEventArgs e)
+        private void PBMain_MouseWheel(object sender, MouseEventArgs e)
         {
             double delta;
             if (e.Delta > 0)
@@ -124,8 +123,8 @@ namespace _3DViewerJPMM
             y2 = e.Y;
             if (e.Button == MouseButtons.Left) // if the mouseleft has been pressed
             {
-                obj.RotationX(GrausToRadians(-(y2 - y1)), showHiddenFaces);
-                obj.RotationY(GrausToRadians(x2 - x1), showHiddenFaces);
+                obj.RotationX(DegreesToRadians(-(y2 - y1)), showHiddenFaces);
+                obj.RotationY(DegreesToRadians(x2 - x1), showHiddenFaces);
                 RefreshObject();
             }
             else if (e.Button == MouseButtons.Right) // if the mouseright has been pressed
@@ -136,7 +135,7 @@ namespace _3DViewerJPMM
             }
             else if (e.Button == MouseButtons.Middle){
                 double g = (Math.Abs(y2 - y1) > Math.Abs(x2 - x1)) ? -(y2 - y1) : x2 - x1;
-                obj.RotationZ(GrausToRadians(g), showHiddenFaces);
+                obj.RotationZ(DegreesToRadians(g), showHiddenFaces);
                 RefreshObject();
 
             }
@@ -165,6 +164,20 @@ namespace _3DViewerJPMM
             }).Start();
         }
 
+        private void HideCheckBox()
+        {
+            CheckBoxFaces.Checked = true;
+            CheckBoxFaces.AutoCheck = false;
+            CheckBoxFaces.ForeColor = Color.Gray;
+        }
+
+        private void ShowCheckBox()
+        {
+            CheckBoxFaces.Checked = CheckBoxFaces.Checked;
+            CheckBoxFaces.AutoCheck = true;
+            CheckBoxFaces.ForeColor = Color.FromArgb(237, 237, 237);
+        }
+
         private void RefreshObject()
         {
             if(obj != null)
@@ -173,14 +186,19 @@ namespace _3DViewerJPMM
                 switch (selectedPerspective)
                 {
                     case "Cabinet":
-                        
+                        HideCheckBox();
+                        draw.ObliqueProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, 0.5);
                         break;
                     case "Cavalier":
+                        HideCheckBox();
+                        draw.ObliqueProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, 1);
                         break;
                     case "Perspective":
+                        HideCheckBox();
                         draw.PerspectiveProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
                         break;
                     default:
+                        ShowCheckBox();
                         draw.ParallelProjectionXY(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
                         break;
                 }

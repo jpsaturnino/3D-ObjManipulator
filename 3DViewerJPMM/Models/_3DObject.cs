@@ -28,7 +28,7 @@ namespace _3DViewerJPMM.Models
         private void Load3DObject(string file)
         {
             Debug.WriteLine("Loading 3D object...");
-            string[] lines = System.IO.File.ReadAllLines(file);
+            string[] lines = File.ReadAllLines(file);
             double x, y, z;
 
             foreach (string line in lines)

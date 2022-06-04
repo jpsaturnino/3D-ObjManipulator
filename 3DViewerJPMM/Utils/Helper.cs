@@ -26,7 +26,8 @@
                         result[i, j] += a[i, k] * b[k, j];
             return result;
         }
-
+        static public double DegreesToRadians(double degrees) => degrees * Math.PI / 180;
+        
         static public double[,] Transpose(double[,] a)
         {
             int aRows = a.GetLength(0);
