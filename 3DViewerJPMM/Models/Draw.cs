@@ -9,9 +9,6 @@ namespace _3DViewerJPMM.Models
     {
         private int CX, CY;
 
-        /*
-         * Projeção paralela no plano XY 
-         */
         public void ParallelProjectionXY(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
@@ -36,10 +33,7 @@ namespace _3DViewerJPMM.Models
             }
             bmp.UnlockBits(data);
         }
-
-        /*
-         * Projeção paralela da face no plano XY 
-         */
+        
         private unsafe void ParallelProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color color)
         {
             Vertex p1, p2;
@@ -207,18 +201,11 @@ namespace _3DViewerJPMM.Models
             }
         }
 
-        /* 
-         * verifica se o pixel (x,y) esta dentro da imagem
-         * retorna true se estiver, false caso contrario
-         */
         private bool InImage(BitmapData data, int x, int y)
         {
             return x >= 0 && x < data.Width && y >= 0 && y < data.Height;
         }
 
-        /* 
-         * escreve o pixel (x,y) na imagem
-         */
         private void WritePixel(BitmapData data, int x, int y, Color color)
         {
             unsafe
@@ -231,7 +218,7 @@ namespace _3DViewerJPMM.Models
             }
         }
 
-        public void Paint(Bitmap bmp, Color color)
+        public void Ppaint(Bitmap bmp, Color color)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -260,8 +247,8 @@ namespace _3DViewerJPMM.Models
             }
             bmp.UnlockBits(data);
         }
-        /*
-        public void paint(Bitmap bmp, Color color)
+        
+        public void Paint(Bitmap bmp, Color color)
         {
 
             // lock dados
@@ -288,6 +275,6 @@ namespace _3DViewerJPMM.Models
             // unluck dados
             bmp.UnlockBits(bmpdata);
         }// fim paint
-        */
+        
     }
 }
