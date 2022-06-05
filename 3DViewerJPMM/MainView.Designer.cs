@@ -30,6 +30,10 @@
         {
             this.LoadObjectBtn = new System.Windows.Forms.Button();
             this.SidePanel = new System.Windows.Forms.Panel();
+            this.minimizeBtn = new System.Windows.Forms.Button();
+            this.closeBtn = new System.Windows.Forms.Button();
+            this.labelLightning = new System.Windows.Forms.Label();
+            this.cbLighting = new System.Windows.Forms.ComboBox();
             this.rbPerspective = new System.Windows.Forms.RadioButton();
             this.rbCavalier = new System.Windows.Forms.RadioButton();
             this.rbCabinet = new System.Windows.Forms.RadioButton();
@@ -72,6 +76,10 @@
             // SidePanel
             // 
             this.SidePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.SidePanel.Controls.Add(this.minimizeBtn);
+            this.SidePanel.Controls.Add(this.closeBtn);
+            this.SidePanel.Controls.Add(this.labelLightning);
+            this.SidePanel.Controls.Add(this.cbLighting);
             this.SidePanel.Controls.Add(this.rbPerspective);
             this.SidePanel.Controls.Add(this.rbCavalier);
             this.SidePanel.Controls.Add(this.rbCabinet);
@@ -85,12 +93,77 @@
             this.SidePanel.Size = new System.Drawing.Size(200, 585);
             this.SidePanel.TabIndex = 1;
             // 
+            // minimizeBtn
+            // 
+            this.minimizeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.minimizeBtn.BackgroundImage = global::_3DViewerJPMM.Properties.Resources.dash;
+            this.minimizeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.minimizeBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.minimizeBtn.FlatAppearance.BorderSize = 0;
+            this.minimizeBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
+            this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.minimizeBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.minimizeBtn.Location = new System.Drawing.Point(147, 3);
+            this.minimizeBtn.Name = "minimizeBtn";
+            this.minimizeBtn.Padding = new System.Windows.Forms.Padding(10);
+            this.minimizeBtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.minimizeBtn.Size = new System.Drawing.Size(24, 24);
+            this.minimizeBtn.TabIndex = 21;
+            this.minimizeBtn.UseVisualStyleBackColor = false;
+            this.minimizeBtn.Click += new System.EventHandler(this.MinimizeBtn_Click);
+            // 
+            // closeBtn
+            // 
+            this.closeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.closeBtn.BackgroundImage = global::_3DViewerJPMM.Properties.Resources.close;
+            this.closeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.closeBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.closeBtn.FlatAppearance.BorderSize = 0;
+            this.closeBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
+            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.closeBtn.Location = new System.Drawing.Point(173, 3);
+            this.closeBtn.Name = "closeBtn";
+            this.closeBtn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.closeBtn.Size = new System.Drawing.Size(24, 24);
+            this.closeBtn.TabIndex = 20;
+            this.closeBtn.UseVisualStyleBackColor = false;
+            this.closeBtn.Click += new System.EventHandler(this.CloseBtn_Click);
+            // 
+            // labelLightning
+            // 
+            this.labelLightning.AutoSize = true;
+            this.labelLightning.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelLightning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
+            this.labelLightning.Location = new System.Drawing.Point(13, 183);
+            this.labelLightning.Name = "labelLightning";
+            this.labelLightning.Size = new System.Drawing.Size(96, 20);
+            this.labelLightning.TabIndex = 19;
+            this.labelLightning.Text = "Iluminação";
+            // 
+            // cbLighting
+            // 
+            this.cbLighting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLighting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbLighting.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.cbLighting.FormattingEnabled = true;
+            this.cbLighting.Items.AddRange(new object[] {
+            "Wireframe",
+            "Flat",
+            "Gouraud",
+            "Phong"});
+            this.cbLighting.Location = new System.Drawing.Point(13, 206);
+            this.cbLighting.Name = "cbLighting";
+            this.cbLighting.Size = new System.Drawing.Size(175, 23);
+            this.cbLighting.TabIndex = 0;
+            this.cbLighting.SelectedIndexChanged += new System.EventHandler(this.cbLighting_SelectedIndexChanged);
+            // 
             // rbPerspective
             // 
             this.rbPerspective.AutoSize = true;
             this.rbPerspective.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbPerspective.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.rbPerspective.Location = new System.Drawing.Point(22, 105);
+            this.rbPerspective.Location = new System.Drawing.Point(22, 131);
             this.rbPerspective.Name = "rbPerspective";
             this.rbPerspective.Size = new System.Drawing.Size(97, 20);
             this.rbPerspective.TabIndex = 17;
@@ -104,7 +177,7 @@
             this.rbCavalier.AutoSize = true;
             this.rbCavalier.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbCavalier.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.rbCavalier.Location = new System.Drawing.Point(22, 64);
+            this.rbCavalier.Location = new System.Drawing.Point(22, 90);
             this.rbCavalier.Name = "rbCavalier";
             this.rbCavalier.Size = new System.Drawing.Size(83, 20);
             this.rbCavalier.TabIndex = 16;
@@ -118,7 +191,7 @@
             this.rbCabinet.AutoSize = true;
             this.rbCabinet.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbCabinet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.rbCabinet.Location = new System.Drawing.Point(22, 44);
+            this.rbCabinet.Location = new System.Drawing.Point(22, 70);
             this.rbCabinet.Name = "rbCabinet";
             this.rbCabinet.Size = new System.Drawing.Size(71, 20);
             this.rbCabinet.TabIndex = 15;
@@ -132,7 +205,7 @@
             this.rbParallel.AutoSize = true;
             this.rbParallel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rbParallel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.rbParallel.Location = new System.Drawing.Point(22, 84);
+            this.rbParallel.Location = new System.Drawing.Point(22, 110);
             this.rbParallel.Name = "rbParallel";
             this.rbParallel.Size = new System.Drawing.Size(76, 20);
             this.rbParallel.TabIndex = 14;
@@ -146,11 +219,11 @@
             this.labelProjections.AutoSize = true;
             this.labelProjections.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelProjections.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.labelProjections.Location = new System.Drawing.Point(13, 18);
+            this.labelProjections.Location = new System.Drawing.Point(13, 44);
             this.labelProjections.Name = "labelProjections";
-            this.labelProjections.Size = new System.Drawing.Size(88, 20);
+            this.labelProjections.Size = new System.Drawing.Size(79, 20);
             this.labelProjections.TabIndex = 13;
-            this.labelProjections.Text = "Projeções";
+            this.labelProjections.Text = "Projeção";
             // 
             // CheckBoxFaces
             // 
@@ -159,7 +232,7 @@
             this.CheckBoxFaces.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CheckBoxFaces.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CheckBoxFaces.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
-            this.CheckBoxFaces.Location = new System.Drawing.Point(22, 528);
+            this.CheckBoxFaces.Location = new System.Drawing.Point(25, 533);
             this.CheckBoxFaces.Name = "CheckBoxFaces";
             this.CheckBoxFaces.Size = new System.Drawing.Size(150, 20);
             this.CheckBoxFaces.TabIndex = 1;
@@ -311,5 +384,9 @@
         private RadioButton rbPerspective;
         private RadioButton rbCavalier;
         private RadioButton rbCabinet;
+        private Label labelLightning;
+        private ComboBox cbLighting;
+        private Button closeBtn;
+        private Button minimizeBtn;
     }
 }

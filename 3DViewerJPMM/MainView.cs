@@ -12,13 +12,14 @@ namespace _3DViewerJPMM
         private Draw draw;
         private int x1, y1, x2, y2, tx, ty;
         private bool showHiddenFaces;
-        private string selectedPerspective;
+        private string selectedPerspective, selectedLightning;
 
         public MainView() {
             InitializeComponent();
             showHiddenFaces = false;
             PBMain.MouseWheel += new MouseEventHandler(PBMain_MouseWheel);
             rbParallel.Checked = true;
+            cbLighting.SelectedIndex = 0;
             CheckBoxFaces.AutoCheck = true;
         }
 
@@ -63,10 +64,26 @@ namespace _3DViewerJPMM
             }
         }
 
+        private void EnableLightningOptions(bool enable)
+        {
+            if(enable)
+            {
+                cbLighting.Enabled = true;
+                labelLightning.ForeColor = Color.FromArgb(237, 237, 237);
+            }
+            else
+            {
+                cbLighting.Enabled = false;
+                labelLightning.ForeColor = Color.Gray;
+                cbLighting.SelectedIndex = 0;
+            }
+        }
+
         private void rbParallel_CheckedChanged(object sender, EventArgs e)
         {
             ChangeRadioBtnColor(rbParallel);
             selectedPerspective = "Parallel";
+            EnableLightningOptions(true);
             RefreshObject();
         }
 
@@ -74,6 +91,7 @@ namespace _3DViewerJPMM
         {
             ChangeRadioBtnColor(rbCabinet);
             selectedPerspective = "Cabinet";
+            EnableLightningOptions(false);
             RefreshObject();
         }
 
@@ -81,6 +99,7 @@ namespace _3DViewerJPMM
         {
             ChangeRadioBtnColor(rbCavalier);
             selectedPerspective = "Cavalier";
+            EnableLightningOptions(false);
             RefreshObject();
         }
 
@@ -88,6 +107,7 @@ namespace _3DViewerJPMM
         {
             ChangeRadioBtnColor(rbPerspective);
             selectedPerspective = "Perspective";
+            EnableLightningOptions(false);
             RefreshObject();
         }
 
@@ -115,6 +135,22 @@ namespace _3DViewerJPMM
                 delta = 0.9;
             obj.Scaling(delta, delta, delta);
             RefreshObject();
+        }
+
+        private void CloseBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void MinimizeBtn_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void cbLighting_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            
         }
 
         private void PBMain_MouseMove(object sender, MouseEventArgs e)

@@ -26,6 +26,7 @@
                         result[i, j] += a[i, k] * b[k, j];
             return result;
         }
+        
         static public double DegreesToRadians(double degrees) => degrees * Math.PI / 180;
         
         static public double[,] Transpose(double[,] a)
@@ -38,6 +39,5 @@
                     result[j, i] = a[i, j];
             return result;
         }
-        
     }
 }

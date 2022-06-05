@@ -1,5 +1,4 @@
 ﻿using static _3DViewerJPMM.Utils.Helper;
-using System.Diagnostics;
 using System.Drawing.Imaging;
 
 namespace _3DViewerJPMM.Models
@@ -217,41 +216,9 @@ namespace _3DViewerJPMM.Models
                 *(p + 2) = color.R;
             }
         }
-
-        public void Ppaint(Bitmap bmp, Color color)
-        {
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            unsafe
-            {
-                byte* p = (byte*)data.Scan0;
-                for (int i = 0; i < data.Height; ++i)
-                {
-                    /*
-                     * ponteiro para o inicio da linha
-                     * p += data.Stride: avança para o inicio da proxima linha
-                     */
-                    for (int j = 0; j < data.Width; ++j)
-                    {
-                        /* 
-                         * ponteiro para o pixel da linha
-                         * p += 3: avança para o pixel da proxima coluna
-                         */
-                        *p = color.B;
-                        *(p + 1) = color.G;
-                        *(p + 2) = color.R;
-                        p += 3;
-                    }
-                    p += data.Stride - data.Width * 3;
-                }
-            }
-            bmp.UnlockBits(data);
-        }
         
         public void Paint(Bitmap bmp, Color color)
         {
-
-            // lock dados
             BitmapData bmpdata = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             unsafe
@@ -270,11 +237,9 @@ namespace _3DViewerJPMM.Models
                     }
                     aux += padding;
                 }
-            }// fim unsafe
+            }
 
-            // unluck dados
             bmp.UnlockBits(bmpdata);
-        }// fim paint
-        
+        }
     }
 }
