@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
             this.LoadObjectBtn = new System.Windows.Forms.Button();
             this.SidePanel = new System.Windows.Forms.Panel();
             this.minimizeBtn = new System.Windows.Forms.Button();
@@ -50,11 +51,14 @@
             this.plantView = new System.Windows.Forms.Label();
             this.sideView = new System.Windows.Forms.Label();
             this.frontView = new System.Windows.Forms.Label();
+            this.lightBtn = new System.Windows.Forms.Button();
+            this.PBLogo = new System.Windows.Forms.PictureBox();
             this.SidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PBMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBFrontalView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBLateralView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBPlantView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // LoadObjectBtn
@@ -155,8 +159,7 @@
             this.cbLighting.Location = new System.Drawing.Point(13, 206);
             this.cbLighting.Name = "cbLighting";
             this.cbLighting.Size = new System.Drawing.Size(175, 23);
-            this.cbLighting.TabIndex = 0;
-            this.cbLighting.SelectedIndexChanged += new System.EventHandler(this.cbLighting_SelectedIndexChanged);
+            this.cbLighting.TabIndex = 18;
             // 
             // rbPerspective
             // 
@@ -308,9 +311,9 @@
             this.plantView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(237)))), ((int)(((byte)(237)))));
             this.plantView.Location = new System.Drawing.Point(659, 340);
             this.plantView.Name = "plantView";
-            this.plantView.Size = new System.Drawing.Size(68, 15);
+            this.plantView.Size = new System.Drawing.Size(78, 15);
             this.plantView.TabIndex = 10;
-            this.plantView.Text = "Vista planta";
+            this.plantView.Text = "Vista superior";
             // 
             // sideView
             // 
@@ -332,12 +335,40 @@
             this.frontView.TabIndex = 12;
             this.frontView.Text = "Vista frontal";
             // 
+            // lightBtn
+            // 
+            this.lightBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.lightBtn.BackgroundImage = global::_3DViewerJPMM.Properties.Resources.lamp;
+            this.lightBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.lightBtn.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.lightBtn.FlatAppearance.BorderSize = 0;
+            this.lightBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lightBtn.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lightBtn.Location = new System.Drawing.Point(368, 60);
+            this.lightBtn.Name = "lightBtn";
+            this.lightBtn.Size = new System.Drawing.Size(30, 30);
+            this.lightBtn.TabIndex = 13;
+            this.lightBtn.UseVisualStyleBackColor = false;
+            // 
+            // PBLogo
+            // 
+            this.PBLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PBLogo.BackgroundImage")));
+            this.PBLogo.ErrorImage = ((System.Drawing.Image)(resources.GetObject("PBLogo.ErrorImage")));
+            this.PBLogo.InitialImage = ((System.Drawing.Image)(resources.GetObject("PBLogo.InitialImage")));
+            this.PBLogo.Location = new System.Drawing.Point(12, 5);
+            this.PBLogo.Name = "PBLogo";
+            this.PBLogo.Size = new System.Drawing.Size(161, 35);
+            this.PBLogo.TabIndex = 14;
+            this.PBLogo.TabStop = false;
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.ClientSize = new System.Drawing.Size(957, 585);
+            this.Controls.Add(this.PBLogo);
+            this.Controls.Add(this.lightBtn);
             this.Controls.Add(this.frontView);
             this.Controls.Add(this.sideView);
             this.Controls.Add(this.plantView);
@@ -359,6 +390,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PBFrontalView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBLateralView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PBPlantView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PBLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -388,5 +420,7 @@
         private ComboBox cbLighting;
         private Button closeBtn;
         private Button minimizeBtn;
+        private Button lightBtn;
+        private PictureBox PBLogo;
     }
 }

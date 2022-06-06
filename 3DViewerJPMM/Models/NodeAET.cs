@@ -2,12 +2,9 @@
 {
     internal class NodeAET
     { 
-        private int ymax;
-        private double xmin, incx;
-        private double zmin, bzmin, rxmin, gymin;
-        private double inczy, incrx, incgy, incbz;
+        private double ymax, xmin, incx, zmin, bzmin, rxmin, gymin, inczy, incrx, incgy, incbz;
 
-        public NodeAET(int ymax, int xmin, int incx, double zmin, double bzmin, double rxmin, double gymin, double inczy, double incrx, double incgy, double incbz)
+        public NodeAET(double ymax, double xmin, double incx, double zmin, double bzmin, double rxmin, double gymin, double inczy, double incrx, double incgy, double incbz)
         {
             this.ymax = ymax;
             this.xmin = xmin;
@@ -22,7 +19,7 @@
             this.incbz = incbz;
         }
 
-        public int YMax
+        public double YMax
         {
             get { return ymax; }
             set { ymax = value; }

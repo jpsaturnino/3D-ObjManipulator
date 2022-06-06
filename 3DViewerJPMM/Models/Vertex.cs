@@ -15,59 +15,47 @@ namespace _3DViewerJPMM.Models
         
         public Vertex()
         {
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
+            x = 0;
+            y = 0;
+            z = 0;
         }
 
-        public Vertex Increment(Vertex v)
-        {
-            return new Vertex(this.x + v.x, this.y + v.y, this.z + v.z);
-        }
-
-        public Vertex Decrement(Vertex v)
-        {
-            return new Vertex(this.x - v.x, this.y - v.y, this.z - v.z);
-        }
-
-        public Vertex Division(double d)
-        {
-            return new Vertex(this.x / d, this.y / d, this.z / d);
-        }
+        public Vertex Increment(Vertex v) => new Vertex(x + v.x, y + v.y, z + v.z);
         
-        private double GetMagnitude()
-        {
-            return Math.Sqrt(Math.Pow(this.x, 2) + Math.Pow(this.y, 2) + Math.Pow(this.z, 2));
-        }
+        public Vertex Decrement(Vertex v) => new Vertex(x - v.x, y - v.y, z - v.z);
+
+        public Vertex Division(double d) => new Vertex(x / d, y / d, z / d);
+        
+        private double GetMagnitude() => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
 
         public Vertex Normalize()
         {
             double magnitude = GetMagnitude();
             if (magnitude == 0)
                 return new Vertex(1, 1, 1);
-            return this.Division(magnitude);
+            return Division(magnitude);
         }
        
         public double DotProduct(Vertex v)
         {
-            return this.x * v.x + this.y * v.y + this.z * v.z;
+            return x * v.x + y * v.y + z * v.z;
         }
 
         public Vertex CrossProduct(Vertex v)
         {
             return new Vertex(
-                this.y * v.z - this.z * v.y, 
-                this.z * v.x - this.x * v.z, 
-                this.x * v.y - this.y * v.x
+                y * v.z - z * v.y, 
+                z * v.x - x * v.z, 
+                x * v.y - y * v.x
             );
         }
 
         public double[,] ToMatrix()
         {
             return new double[,] {
-                { this.x },
-                { this.y },
-                { this.z },
+                { x },
+                { y },
+                { z },
                 { 1 }
             };
         }
@@ -88,10 +76,6 @@ namespace _3DViewerJPMM.Models
         {
             get { return z; }
             set { z = value; }
-        }
-        public override string ToString()
-        {
-            return "(" + x + ", " + y + ", " + z + ")";
         }
     }
 }

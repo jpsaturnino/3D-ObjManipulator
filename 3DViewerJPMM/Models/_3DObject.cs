@@ -24,6 +24,38 @@ namespace _3DViewerJPMM.Models
             maxX = maxY = maxZ = minX = minY = minZ = 0;
             Load3DObject(file);
         }
+        
+        public _3DObject()
+        {
+            faces = new List<List<int>>();
+            currentFacesVertex = new List<List<int>>();
+            currentVertices = new List<Vertex>();
+            mainVertices = new List<Vertex>();
+            normalFaces = normalVertices = null;
+            MA = Identity(4);
+            maxX = maxY = maxZ = minX = minY = minZ = 0;
+        }
+
+        public _3DObject Copy()
+        {
+            _3DObject o = new _3DObject();
+            o.mainVertices = mainVertices;
+            o.faces = faces;
+            o.currentFacesVertex = currentFacesVertex ;
+            o.normalFaces = normalFaces;
+            o.normalFaces = (Vertex[])normalFaces.Clone();
+            o.MA = cloneMat(MA);
+            return o;
+        }
+
+        public double[,] cloneMat(double[,] mat)
+        {
+            double[,] nova = new double[mat.GetLength(0), mat.GetLength(1)];
+            for (int i = 0; i < mat.GetLength(0); ++i)
+                for (int j = 0; j < mat.GetLength(1); ++j)
+                    nova[i, j] = mat[i, j];
+            return nova;
+        }
 
         private void Load3DObject(string file)
         {
@@ -119,7 +151,7 @@ namespace _3DViewerJPMM.Models
                 UpdateNormalFaces();
         }
 
-        private void UpdateNormalFaces() /* da pra refatorar */
+        public void UpdateNormalFaces() /* da pra refatorar */
         {
             normalFaces = new Vertex[faces.Count];
             normalVertices = new Vertex[mainVertices.Count];
@@ -150,6 +182,86 @@ namespace _3DViewerJPMM.Models
             }
         }
 
+        public EdgeTable CreateFlatET(int f, int height, int tx, int ty, Vertex Luz, Vertex Eye, int n,
+            Vertex ia, Vertex id, Vertex ie, Vertex ka, Vertex kd, Vertex ke)
+        {
+            Vertex cor;
+            EdgeTable et = new EdgeTable(height + 1);
+            List<int> face = faces[f];
+            double xmax, ymax, zmax, xmin, ymin, zmin, dx, dy, dz, incx, incz;
+            int y;
+            cor = Draw.PhongShading(Luz, Eye, normalFaces[f], n, ia, id, ie, ka, kd, ke);
+            for (int i = 0; i + 1 < face.Count; ++i)
+            { // do primeiro ponto até o ultimo
+                if (currentVertices[face[i]].Y >= currentVertices[face[i + 1]].Y)
+                {
+                    xmax = currentVertices[face[i]].X;
+                    ymax = currentVertices[face[i]].Y;
+                    zmax = currentVertices[face[i]].Z;
+                    xmin = currentVertices[face[i + 1]].X;
+                    ymin = currentVertices[face[i + 1]].Y;
+                    zmin = currentVertices[face[i + 1]].Z;
+                }
+                else
+                {
+                    xmin = currentVertices[face[i]].X;
+                    ymin = currentVertices[face[i]].Y;
+                    zmin = currentVertices[face[i]].Z;
+                    xmax = currentVertices[face[i + 1]].X;
+                    ymax = currentVertices[face[i + 1]].Y;
+                    zmax = currentVertices[face[i + 1]].Z;
+                }
+                dx = xmax - xmin;
+                dy = ymax - ymin;
+                dz = zmax - zmin;
+
+                incx = (dy != 0) ? dx / dy : 0;
+                incz = dy != 0 ? dz / dy : 0;
+
+                y = (int)ymin + ty;
+                if (y < 0) y = 0;
+                else if (y >= height) y = height - 1;
+                
+                if (et.AET(y) == null) et.Initialize(y);
+                
+                et.AET(y).Insert(new NodeAET(ymax + ty, xmin + tx, incx, zmin, incz, cor.X, cor.Y, cor.Z, 0, 0, 0));
+            }
+            
+            // ultimo com o primeiro
+            if (currentVertices[face[0]].Y >= currentVertices[face[face.Count - 1]].Y)
+            {
+                xmax = currentVertices[face[0]].X;
+                ymax = currentVertices[face[0]].Y;
+                zmax = currentVertices[face[0]].Z;
+                xmin = currentVertices[face[face.Count - 1]].X;
+                ymin = currentVertices[face[face.Count - 1]].Y;
+                zmin = currentVertices[face[face.Count - 1]].Z;
+            }
+            else
+            {
+                xmin = currentVertices[face[0]].X;
+                ymin = currentVertices[face[0]].Y;
+                zmin = currentVertices[face[0]].Z;
+                xmax = currentVertices[face[face.Count - 1]].X;
+                ymax = currentVertices[face[face.Count - 1]].Y;
+                zmax = currentVertices[face[face.Count - 1]].Z;
+            }
+            dx = xmax - xmin;
+            dy = ymax - ymin;
+            dz = zmax - zmin;
+
+            incx = (dy != 0) ? dx / dy : 0;
+            incz = dy != 0 ? dz / dy : 0;
+
+            y = (int)ymin + ty;
+            if (y < 0) y = 0;
+            else if (y >= height) y = height - 1;
+            if (et.AET(y) == null)
+                et.Initialize(y);
+            et.AET(y).Insert(new NodeAET(ymax + ty, xmin + tx, incx, zmin, incz, cor.X, cor.Y, cor.Z, 0, 0, 0));
+            return et;
+        }
+        
         public double MAX_X { get => (int)Math.Round(maxX); set => maxX = value; }
 
         public double MAX_Y { get => (int)Math.Round(maxY); set => maxY = value; }

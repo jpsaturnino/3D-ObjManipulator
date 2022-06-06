@@ -3,12 +3,12 @@ using System.Drawing.Imaging;
 
 namespace _3DViewerJPMM.Models
 {
-
     internal class Draw
     {
         private int CX, CY;
+        private Vertex eye = new Vertex(0, 0, 1);
 
-        public void ParallelProjectionXY(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces)
+        public void ParallelProjection(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, string view)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -21,69 +21,90 @@ namespace _3DViewerJPMM.Models
                 if (showHiddenFaces)
                 {
                     for (int idf = 0; idf < faces.Count; ++idf)
-                        ParallelProjectionFaceXY(data, faces[idf], vertices, lineColor);
+                        ParallelProjectionFace(data, faces[idf], vertices, lineColor, view);
                 }
                 else
                 {
                     for (int idf = 0; idf < faces.Count; ++idf)
                         if (obj.NormalFaceAt(idf).Z >= 0.0)
-                            ParallelProjectionFaceXY(data, faces[idf], vertices, lineColor);
+                            ParallelProjectionFace(data, faces[idf], vertices, lineColor, view);
                 }
             }
             bmp.UnlockBits(data);
         }
-        
-        private unsafe void ParallelProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color color)
-        {
-            Vertex p1, p2;
-            int i;
-            for (i = 0; i + 1 < f.Count; ++i)
-            {
-                p1 = vertices[f[i]];
-                p2 = vertices[f[i + 1]];
-                Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, color);
-            }
-            i = f.Count - 1;
-            p1 = vertices[f[i]];
-            p2 = vertices[f[0]];
-            Bresenham(data, (int)p1.X + CX, (int)p1.Y + CY, (int)p2.X + CX, (int)p2.Y + CY, color);
-        }
-
-        public void PerspectiveProjectionXY(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, double fov= -1000)
-        {
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            unsafe
-            {
-                CX = tx;
-                CY = ty;
-                List<List<int>> faces = obj.Faces;
-                List<Vertex> vertices = obj.CurrentVertices;
-                if (showHiddenFaces)
-                    for (int idf = 0; idf < faces.Count; ++idf)
-                        PerspectiveProjectionFaceXY(data, faces[idf], vertices, lineColor, fov);
-                else
-                    for (int idf = 0; idf < faces.Count; ++idf)
-                        if (obj.NormalFaceAt(idf).Z >= 0.0)
-                            PerspectiveProjectionFaceXY(data, faces[idf], vertices, lineColor, fov);
-            }
-            bmp.UnlockBits(data);
-        }
-
-        private unsafe void PerspectiveProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, Color color, double fov)
+                
+        private unsafe void ParallelProjectionFace(BitmapData data, List<int> f, List<Vertex> vertices, Color color, string view)
         {
             Vertex v1, v2;
-            int i;
-            double x1, y1, z1, x2, y2, z2;
-            for (i = 0; i + 1 < f.Count; ++i)
+            for (int i = 0; i < f.Count; ++i)
             {
                 v1 = vertices[f[i]];
                 if (i == f.Count - 1)
                     v2 = vertices[f[0]];
                 else
                     v2 = vertices[f[i + 1]];
-                x1 = v1.X; y1 = v1.Y; z1 = v1.Z;
-                x2 = v2.X; y2 = v2.Y; z2 = v2.Z;
+                switch (view)
+                {
+                    case "XY":
+                        Bresenham(data, (int)v1.X + CX, (int)v1.Y + CY, (int)v2.X + CX, (int)v2.Y + CY, color);
+                        break;
+                    case "ZX":
+                        Bresenham(data, (int)v1.Z + CX, (int)v1.X + CY, (int)v2.Z + CX, (int)v2.X + CY, color);
+                        break;
+                    case "ZY":
+                        Bresenham(data, (int)v1.Z + CX, (int)v1.Y + CY, (int)v2.Z + CX, (int)v2.Y + CY, color);
+                        break;
+                }
+            }
+        }
+
+        public void PerspectiveProjection(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, string view, double fov = -1000)
+        {
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            unsafe
+            {
+                CX = tx;
+                CY = ty;
+                List<List<int>> faces = obj.Faces;
+                List<Vertex> vertices = obj.CurrentVertices;
+                if (showHiddenFaces)
+                    for (int idf = 0; idf < faces.Count; ++idf)
+                        PerspectiveProjectionFace(data, faces[idf], vertices, lineColor, fov, view);
+                else
+                    for (int idf = 0; idf < faces.Count; ++idf)
+                        if (obj.NormalFaceAt(idf).Z >= 0.0)
+                            PerspectiveProjectionFace(data, faces[idf], vertices, lineColor, fov, view);
+            }
+            bmp.UnlockBits(data);
+        }
+
+        private unsafe void PerspectiveProjectionFace(BitmapData data, List<int> f, List<Vertex> vertices, Color color, double fov, string view)
+        {
+            Vertex v1, v2;
+            double x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
+            for (int i = 0; i < f.Count; ++i)
+            {
+                v1 = vertices[f[i]];
+                if (i == f.Count - 1)
+                    v2 = vertices[f[0]];
+                else
+                    v2 = vertices[f[i + 1]];
+                switch (view)
+                {
+                    case "XY":
+                        x1 = v1.X; y1 = v1.Y; z1 = v1.Z;
+                        x2 = v2.X; y2 = v2.Y; z2 = v2.Z;
+                        break;
+                    case "ZX":
+                        x1 = v1.Z; y1 = v1.X; z1 = v1.Y;
+                        x2 = v2.Z; y2 = v2.X; z2 = v2.Y;
+                        break;
+                    case "ZY":
+                        x1 = v1.Z; y1 = v1.Y; z1 = v1.X;
+                        x2 = v2.Z; y2 = v2.Y; z2 = v2.X;
+                        break;
+                }
                 x1 = x1 * fov / (z1 += fov);
                 y1 = y1 * fov / z1;
                 x2 = x2 * fov / (z2 += fov);
@@ -116,26 +137,120 @@ namespace _3DViewerJPMM.Models
         private void ObliqueProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, double L, Color cor)
         {
             Vertex v1, v2;
-            int i;
             double x1, y1, x2, y2;
-            double alpha = (Math.PI * 45) / 180;
-            double cosh = Math.Cos(alpha), sinh = Math.Sin(alpha);
-            double coshL = L * cosh, sinhL = L * sinh;
-            for (i = 0; i < f.Count; ++i)
+            double alpha = DegreesToRadians(45);
+            double cosh = CosH(alpha), sinh = SinH(alpha), coshL = L * cosh, sinhL = L * sinh;
+            for (int i = 0; i < f.Count; ++i)
             {
                 v1 = vertices[f[i]];
                 if (i == f.Count - 1)
                     v2 = vertices[f[0]];
                 else
                     v2 = vertices[f[i + 1]];
-                x1 = (v1.X + v1.Z) * coshL;
-                y1 = (v1.Y + v1.Z) * sinhL;
-                x2 = (v2.X + v2.Z) * coshL;
-                y2 = (v2.Y + v2.Z) * sinhL;
+                x1 = v1.X + v1.Z * coshL;
+                y1 = v1.Y + v1.Z * sinhL;
+                x2 = v2.X + v2.Z * coshL;
+                y2 = v2.Y + v2.Z * sinhL;
                 Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, cor);
             }
         }
 
+        public void Flat(Bitmap bmp, _3DObject obj, int tx, int ty, Vertex lightPoint, Vertex eyePoint, int n,
+            Vertex ia, Vertex id, Vertex ie, Vertex ka, Vertex kd, Vertex ke)
+        {
+            int height = bmp.Height, width = bmp.Width;
+            double[,] zbuffer = ZBuffer(width, height);
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            
+            EdgeTable et;
+            unsafe
+            {
+                obj.UpdateNormalFaces();
+                for (int i = 0; i < obj.Faces.Count; ++i)
+                    if (obj.NormalFaceAt(i).Z >= 0)
+                    {
+                        et = obj.CreateFlatET(i, height, tx, ty, lightPoint, eyePoint, n, ia, id, ie, ka, kd, ke);
+                        ScanLineFaceFlat(data, et, zbuffer);
+                    }
+            }
+            bmp.UnlockBits(data);
+
+        }
+
+        private void ScanLineFaceFlat(BitmapData data, EdgeTable et, double[,] zbuffer)
+        {
+            List<NodeAET> lista;
+            double z, inczx;
+            int y = 0, cont = 0;
+            while (y < et._MAXSIZE && et.AET(y) == null) ++y;
+            
+            _AET aet = new _AET(), aetAux;
+            do
+            {
+                if (et.AET(y) != null)
+                {
+                    ++cont;
+                    aet.Insert(et.AET(y).LIST);
+                }
+                
+                aetAux = new _AET();
+                foreach (NodeAET no in aet.LIST)
+                {
+                    if (no.YMax > y)
+                        aetAux.Insert(no);
+                }
+                aet = aetAux;
+                aet.Sort();
+                
+                // desenhando linhas
+                lista = aet.LIST;
+                for (int i = 0, x, x2; i + 1 < lista.Count; i += 2)
+                {
+                    x = (int)Math.Round(lista[i].XMin);
+                    x2 = (int)Math.Round(lista[i + 1].XMin);
+                    z = lista[i].Zmin;
+                    inczx = (lista[i + 1].Zmin - lista[i].Zmin) / ((x2) - (x));
+                    for (int c = x, c2 = (int)lista[i + 1].Zmin; c <= c2; ++c)
+                    {
+                        if (InImage(data, x, y) && z > zbuffer[x, y])
+                        {
+                            zbuffer[x, y] = z;
+                            WritePixel(data, x, y, Color.FromArgb(
+                                (int)lista[i].Rxmin, (int)lista[i].Gymin, (int)lista[i].BZMin)
+                            );
+                        }
+                        z += inczx;
+                        ++x;
+                    }
+                }
+                
+                for (int i = 0; i < aet.LIST.Count; ++i)
+                {
+                    aet.LIST[i].XMin = aet.LIST[i].XMin + aet.LIST[i].IncX;
+                    aet.LIST[i].ZMin = aet.LIST[i].ZMin + aet.LIST[i].IncZY;
+                }
+                ++y;
+            } while (aet.LIST.Count > 0); // tem pontos na AET
+        }
+
+        public static Vertex PhongShading(Vertex lightPoint, Vertex eyePoint, Vertex N, int n,
+            Vertex ia, Vertex id, Vertex ie, Vertex ka, Vertex kd, Vertex ke)
+        {
+            Vertex H = lightPoint.Increment(eyePoint).Normalize();
+            double hnn = Math.Pow(H.DotProduct(N), n), ln = lightPoint.DotProduct(N);
+
+            double r = ia.X * ka.X + id.X * kd.X * ln + ie.X * ke.X * hnn;
+            double g = ia.Y * ka.Y + id.Y * kd.Y * ln + ie.Y * ke.Y * hnn;
+            double b = ia.Z * ka.Z + id.Z * kd.Z * ln + ie.Z * ke.Z * hnn;
+            
+            r = r < 0 ? 0 : (r > 1 ? 1 : r);
+            g = g < 0 ? 0 : (g > 1 ? 1 : g);
+            b = b < 0 ? 0 : (b > 1 ? 1 : b);
+            
+            return new Vertex(r * 255, g * 255, b * 255);
+        }
+            
         private unsafe void Bresenham(BitmapData data, int x1, int y1, int x2, int y2, Color color)
         {
             int deltaX = x2 - x1, x, y;

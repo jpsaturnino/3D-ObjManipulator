@@ -28,7 +28,11 @@
         }
         
         static public double DegreesToRadians(double degrees) => degrees * Math.PI / 180;
-        
+
+        static public double CosH(double x) => Math.Cos(x / 2);
+
+        static public double SinH(double x) => Math.Sin(x / 2);
+
         static public double[,] Transpose(double[,] a)
         {
             int aRows = a.GetLength(0);
@@ -38,6 +42,15 @@
                 for (int j = 0; j < aCols; ++j)
                     result[j, i] = a[i, j];
             return result;
+        }
+        
+        static public double[,] ZBuffer(int w, int h)
+        {
+            double[,] zBuffer = new double[w, h];
+            for (int i = 0; i < w; ++i)
+                for (int j = 0; j < h; ++j)
+                    zBuffer[i, j] = -1;
+            return zBuffer;
         }
     }
 }
