@@ -228,7 +228,6 @@ namespace _3DViewerJPMM
             draw.Paint(frontalBitmap, Color.FromArgb(23, 23, 23));
             draw.Paint(sideBitmap, Color.FromArgb(23, 23, 23));
             draw.Paint(plantBitmap, Color.FromArgb(23, 23, 23));
-
             switch(projection)
             {
                 case "Parallel":
