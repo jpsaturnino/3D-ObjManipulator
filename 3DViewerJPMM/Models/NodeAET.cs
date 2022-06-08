@@ -3,8 +3,8 @@
     internal class NodeAET
     { 
         private double ymax, xmin, incx, zmin, bzmin, rxmin, gymin, inczy, incrx, incgy, incbz;
-
-        public NodeAET(double ymax, double xmin, double incx, double zmin, double bzmin, double rxmin, double gymin, double inczy, double incrx, double incgy, double incbz)
+        public NodeAET(double ymax, double xmin, double incx, double zmin, double inczy,
+            double rxmin, double gymin, double bzmin, double incrx, double incgy, double incbz)
         {
             this.ymax = ymax;
             this.xmin = xmin;

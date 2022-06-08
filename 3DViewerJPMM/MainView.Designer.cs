@@ -343,12 +343,14 @@
             this.lightBtn.Cursor = System.Windows.Forms.Cursors.SizeAll;
             this.lightBtn.FlatAppearance.BorderSize = 0;
             this.lightBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lightBtn.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.lightBtn.Location = new System.Drawing.Point(368, 60);
+            this.lightBtn.Location = new System.Drawing.Point(22, 60);
             this.lightBtn.Name = "lightBtn";
             this.lightBtn.Size = new System.Drawing.Size(30, 30);
             this.lightBtn.TabIndex = 13;
             this.lightBtn.UseVisualStyleBackColor = false;
+            this.lightBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LightBtn_MouseDown);
+            this.lightBtn.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LightBtn_MouseMove);
+            this.lightBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LightBtn_MouseUp);
             // 
             // PBLogo
             // 

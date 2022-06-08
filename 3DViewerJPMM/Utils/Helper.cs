@@ -49,7 +49,7 @@
             double[,] zBuffer = new double[w, h];
             for (int i = 0; i < w; ++i)
                 for (int j = 0; j < h; ++j)
-                    zBuffer[i, j] = -1;
+                    zBuffer[i, j] = int.MinValue;
             return zBuffer;
         }
     }

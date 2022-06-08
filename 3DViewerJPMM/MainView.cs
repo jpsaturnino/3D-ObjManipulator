@@ -12,7 +12,7 @@ namespace _3DViewerJPMM
         private Draw draw;
         private Vertex light, eye;
         private int x1, y1, x2, y2, tx, ty;
-        private bool showHiddenFaces;
+        private bool showHiddenFaces, movingLight;
         private string selectedPerspective;
 
         public MainView() {
@@ -244,10 +244,56 @@ namespace _3DViewerJPMM
             
         }
 
+        private void LightBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            movingLight = obj != null && e.Button == MouseButtons.Left;
+            if (movingLight)
+                UpdateLight(MousePosition.X - 4 -(lightBtn.Width >> 1) - SidePanel.Width, MousePosition.Y - lightBtn.Height -60);
+        }
+
+        private void LightBtn_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (movingLight)
+            {
+                UpdateLight(MousePosition.X - 4 - (lightBtn.Width >> 1) - SidePanel.Width, MousePosition.Y - lightBtn.Height -60);
+                RefreshObject();
+            }
+            
+        }
+
+        private void LightBtn_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (movingLight)
+                UpdateLight(MousePosition.X - 4 -  (lightBtn.Width >> 1) - SidePanel.Width, MousePosition.Y - lightBtn.Height-60);
+            movingLight = false;
+        }
+
+        private void UpdateLight(int x, int y)
+        {
+            if (x < PBMain.Location.X)
+                x = PBMain.Location.X;
+            else if (x > (PBMain.Location.X + PBMain.Width) - lightBtn.Width)
+                x = (PBMain.Location.X + PBMain.Width) - lightBtn.Width;
+            if (y < PBMain.Location.Y)
+                y = PBMain.Location.Y;
+            else if (y > (PBMain.Location.Y + PBMain.Height) - lightBtn.Height)
+                y = (PBMain.Location.Y + PBMain.Height) - lightBtn.Height;
+
+            lightBtn.Location = new Point(x, y);
+            x = x + (lightBtn.Width >> 1) - PBMain.Location.X;
+            y = y + (lightBtn.Height >> 1) - PBMain.Location.Y;
+
+            light = new Vertex(x - tx, y - ty, 1);
+            light = light.Normalize();
+            light.Z = 1;
+            lightBtn.Refresh();
+        }
+
         private void RefreshObject()
         {
             if(obj != null)
             {
+                UpdateLight(lightBtn.Location.X, lightBtn.Location.Y);
                 draw.Paint(mainBitmap, AmbientBtnColor.BackColor);
                 switch (selectedPerspective)
                 {
@@ -267,14 +313,14 @@ namespace _3DViewerJPMM
                         ShowCheckBox();
                         switch(cbLighting.Text)
                         {
-                            case "Gouraund":
-                                //draw.Gouraund();
+                            case "Gouraud":
+                                draw.Gouraud(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, new Vertex(0.2, 0.2, 0.2));
                                 break;
                             case "Flat":
-                               //draw.Flat(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, ObjectBtnColor.BackColor.R, ObjectBtnColor.BackColor.G, ObjectBtnColor.BackColor.B, ka, kd, ke);
+                               draw.Flat(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, new Vertex (0.2, 0.2, 0.2));
                                break;
                             case "Phong":
-                                //draw.Phong();
+                                draw.Phong(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, new Vertex(0.2, 0.2, 0.2));
                                 break;
                             default:
                                 draw.ParallelProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, "XY");
