@@ -7,65 +7,61 @@
         public _AET() => aet = new List<NodeAET>();
 
         public void Insert(NodeAET info) => aet.Add(info);
+        
+        public List<NodeAET> LIST => aet;
 
-        public void Insert(List<NodeAET> nodeList)
+        public void Insert(List<NodeAET> L)
         {
-            foreach (NodeAET node in nodeList)
-                aet.Add(node);
+            foreach (NodeAET n in L)
+                aet.Add(n);
         }
 
         public void Sort()
         {
             if (aet.Count > 1)
             {
-                Stack<int> stack = new Stack<int>();
-                NodeAET auxNode;
-                int init = 0, end = aet.Count() - 1, index, limit, middle;
-                double pivotX;
-
-                stack.Push(init);
-                stack.Push(end);
-                while(stack.Count > 0)
+                Stack<int> pilha = new Stack<int>();
+                int inicio = 0, fim = aet.Count - 1, i, j, meio;
+                NodeAET aux;
+                double pivoX;
+                pilha.Push(inicio);
+                pilha.Push(fim);
+                while (pilha.Count > 0)
                 {
-                    init = stack.Pop();
-                    end = stack.Pop();
-
-                    index = init;
-                    limit = end;
-                    middle = (init + limit) / 2;
-
-                    pivotX = aet[middle].XMin;
-
-                    while (index < limit)
+                    fim = pilha.Pop();
+                    inicio = pilha.Pop();
+                    i = inicio;
+                    j = fim;
+                    meio = (i + j) / 2;
+                    pivoX = aet[meio].XMin;
+                    while (i < j)
                     {
-                        while (aet[index].XMin < pivotX) ++index;
-                        
-                        while (aet[index].XMin > pivotX) ++limit;
-                        
-                        if (index <= limit)
+                        while (aet[i].XMin < pivoX)
+                            ++i;
+                        while (aet[j].XMin > pivoX)
+                            --j;
+                        if (i <= j)
                         {
-                            auxNode = aet[index];
-                            aet[index] = aet[limit];
-                            aet[limit] = auxNode;
-                            ++index;
-                            --limit;
+                            aux = aet[i];
+                            aet[i] = aet[j];
+                            aet[j] = aux;
+                            ++i;
+                            --j;
                         }
-
                     }
-                    if (init < limit)
+                    if (inicio < j)
                     {
-                        stack.Push(init);
-                        stack.Push(limit);
+                        pilha.Push(inicio);
+                        pilha.Push(j);
                     }
-                    if (index < end)
+                    if (i < fim)
                     {
-                        stack.Push(index);
-                        stack.Push(end);
+                        pilha.Push(i);
+                        pilha.Push(fim);
                     }
                 }
+
             }
         }
-        
-        public List<NodeAET> LIST { get => aet; set => aet = value; }
     }
 }

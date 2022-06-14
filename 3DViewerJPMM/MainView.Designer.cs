@@ -279,7 +279,7 @@
             // 
             // ObjectBtnColor
             // 
-            this.ObjectBtnColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(0)))), ((int)(((byte)(55)))));
+            this.ObjectBtnColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.ObjectBtnColor.FlatAppearance.BorderSize = 0;
             this.ObjectBtnColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ObjectBtnColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.249999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);

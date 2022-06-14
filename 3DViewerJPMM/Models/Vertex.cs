@@ -1,4 +1,5 @@
 ﻿using static _3DViewerJPMM.Utils.Helper;
+using System.Diagnostics;
 
 namespace _3DViewerJPMM.Models
 {
@@ -12,54 +13,7 @@ namespace _3DViewerJPMM.Models
             this.y = y;
             this.z = z;
         }
-        
-        public Vertex()
-        {
-            x = 0;
-            y = 0;
-            z = 0;
-        }
 
-        public Vertex Increment(Vertex v) => new Vertex(x + v.x, y + v.y, z + v.z);
-        
-        public Vertex Decrement(Vertex v) => new Vertex(x - v.x, y - v.y, z - v.z);
-
-        public Vertex Division(double d) => new Vertex(x / d, y / d, z / d);
-        
-        private double GetMagnitude() => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
-
-        public Vertex Normalize()
-        {
-            double magnitude = GetMagnitude();
-            if (magnitude == 0)
-                return new Vertex(1, 1, 1);
-            return Division(magnitude);
-        }
-       
-        public double DotProduct(Vertex v)
-        {
-            return x * v.x + y * v.y + z * v.z;
-        }
-
-        public Vertex CrossProduct(Vertex v)
-        {
-            return new Vertex(
-                y * v.z - z * v.y, 
-                z * v.x - x * v.z, 
-                x * v.y - y * v.x
-            );
-        }
-
-        public double[,] ToMatrix()
-        {
-            return new double[,] {
-                { x },
-                { y },
-                { z },
-                { 1 }
-            };
-        }
-        
         public double X
         {
             get { return x; }
@@ -77,5 +31,31 @@ namespace _3DViewerJPMM.Models
             get { return z; }
             set { z = value; }
         }
+
+        public double[,] ToMatrix()
+        {
+            return new double[,] {
+                { x },
+                { y },
+                { z },
+                { 1 }
+            };
+        }
+        
+        public Vertex Increment(Vertex v) => new Vertex(x + v.x, y + v.y, z + v.z);
+
+        public Vertex Decrement(Vertex p) => new Vertex(x - p.x, y - p.y, z - p.z);
+
+        public Vertex Normalize()
+        {
+            double magnitude = Math.Sqrt(x * x + y * y + z * z);
+            if (magnitude != 0)
+                return new Vertex(x / magnitude, y / magnitude, z / magnitude);
+            return new Vertex(1, 1, 1);
+        }
+
+        public double DotProduct(Vertex v) => x * v.x + y * v.y + z * v.z;
+
+        public Vertex CrossProduct(Vertex v) => new Vertex(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 }

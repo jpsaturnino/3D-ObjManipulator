@@ -1,28 +1,26 @@
 ﻿namespace _3DViewerJPMM.Models
 {
     internal class NodeAET
-    { 
-        private double ymax, xmin, incx, zmin, bzmin, rxmin, gymin, inczy, incrx, incgy, incbz;
-        public NodeAET(double ymax, double xmin, double incx, double zmin, double inczy,
-            double rxmin, double gymin, double bzmin, double incrx, double incgy, double incbz)
+    {
+        private int ymax;
+        private double incx, xmin;
+        private double zmin, inczy;
+        private double rxmin, gymin, bzmin;
+        private double incrx, incgy, incbz;
+
+        public NodeAET(int ymax, double xmin, double incx, double zmin, double inczy, double rxmin, double gymin, double bzmin, double incrx, double incgy, double incbz)
         {
             this.ymax = ymax;
-            this.xmin = xmin;
             this.incx = incx;
+            this.xmin = xmin;
             this.zmin = zmin;
-            this.bzmin = bzmin;
+            this.inczy = inczy;
             this.rxmin = rxmin;
             this.gymin = gymin;
-            this.inczy = inczy;
+            this.bzmin = bzmin;
             this.incrx = incrx;
             this.incgy = incgy;
             this.incbz = incbz;
-        }
-
-        public double YMax
-        {
-            get { return ymax; }
-            set { ymax = value; }
         }
 
         public double XMin
@@ -37,34 +35,27 @@
             set { incx = value; }
         }
 
-        public double Zmin
-        {
-            get { return zmin; }
-            set { zmin = value; }
-        }
-        
-        public double Gymin
-        {
-            get { return gymin; }
-            set { gymin = value; }
-        }
-        
-        public double Rxmin
-        {
-            get { return rxmin; }
-            set { rxmin = value; }
-        }
-
         public double ZMin
         {
             get { return zmin; }
             set { zmin = value; }
         }
 
-        public double BZMin
+        public double IncZ
         {
-            get { return bzmin; }
-            set { bzmin = value; }
+            get { return inczy; }
+            set { inczy = value; }
+        }
+
+        public double ZYMin
+        {
+            get { return zmin; }
+            set { zmin = value; }
+        }
+        public double IncZY
+        {
+            get { return inczy; }
+            set { inczy = value; }
         }
 
         public double RXMin
@@ -79,10 +70,10 @@
             set { gymin = value; }
         }
 
-        public double IncZY
+        public double BZMin
         {
-            get { return inczy; }
-            set { inczy = value; }
+            get { return bzmin; }
+            set { bzmin = value; }
         }
 
         public double IncRX
@@ -101,6 +92,21 @@
         {
             get { return incbz; }
             set { incbz = value; }
+        }
+
+        public int YMax
+        {
+            get { return ymax; }
+            set { ymax = value; }
+        }
+
+        public void Update(int y)
+        {
+            xmin += incx;
+            zmin += inczy;
+            rxmin += incrx;
+            gymin += incgy;
+            bzmin += incbz;
         }
     }
 }

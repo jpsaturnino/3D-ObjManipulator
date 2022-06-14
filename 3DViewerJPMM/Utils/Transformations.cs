@@ -6,7 +6,7 @@ namespace _3DViewerJPMM.Utils
     {
         public static double[,] RotateX(double angle, double[,] MA)
         {
-            double[,] matrix = Identity(4);
+            double[,] matrix = IdentityMatrix(4);
             matrix[1, 1] = Math.Cos(angle);
             matrix[1, 2] = -Math.Sin(angle);
             matrix[2, 1] = Math.Sin(angle);
@@ -16,7 +16,7 @@ namespace _3DViewerJPMM.Utils
 
         public static double[,] RotateY(double angle, double[,] MA)
         {
-            double[,] matrix = Identity(4);
+            double[,] matrix = IdentityMatrix(4);
             matrix[0, 0] = Math.Cos(angle);
             matrix[0, 2] = Math.Sin(angle);
             matrix[2, 0] = -Math.Sin(angle);
@@ -26,7 +26,7 @@ namespace _3DViewerJPMM.Utils
 
         public static double[,] RotateZ(double angle, double[,] MA)
         {
-            double[,] matrix = Identity(4);
+            double[,] matrix = IdentityMatrix(4);
             matrix[0, 0] = Math.Cos(angle);
             matrix[0, 1] = -Math.Sin(angle);
             matrix[1, 0] = Math.Sin(angle);
@@ -36,7 +36,7 @@ namespace _3DViewerJPMM.Utils
 
         public static double[,] Scale(double x, double y, double z, double[,] MA)
         {
-            double[,] S = Identity(4);
+            double[,] S = IdentityMatrix(4);
             S[0, 0] = x;
             S[1, 1] = y;
             S[2, 2] = z;
@@ -45,7 +45,7 @@ namespace _3DViewerJPMM.Utils
 
         public static double[,] Translate(double x, double y, double z, double[,] MA)
         {
-            double[,] T = Identity(4);
+            double[,] T = IdentityMatrix(4);
             T[0, 3] = x;
             T[1, 3] = y;
             T[2, 3] = z;

@@ -2,12 +2,22 @@
 {
     public static class Helper
     {
-        static public double[,] Identity(int dim)
+        static public double[,] IdentityMatrix(int dim)
         {
             double[,] matrix = new double[dim, dim];
             for (int i = 0; i < dim; i++)
                 matrix[i, i] = 1;
             return matrix;
+        }
+
+        static public double[,] CopyMatrix(double[,] mat)
+        {
+            int dim = mat.GetLength(0);
+            double[,] copy = new double[dim, dim];
+            for (int i = 0; i < dim; i++)
+                for (int j = 0; j < dim; j++)
+                    copy[i, j] = mat[i, j];
+            return copy;
         }
 
         static public double[,] Multiply(double[,] a, double[,] b)
@@ -33,17 +43,6 @@
 
         static public double SinH(double x) => Math.Sin(x / 2);
 
-        static public double[,] Transpose(double[,] a)
-        {
-            int aRows = a.GetLength(0);
-            int aCols = a.GetLength(1);
-            double[,] result = new double[aCols, aRows];
-            for (int i = 0; i < aRows; ++i)
-                for (int j = 0; j < aCols; ++j)
-                    result[j, i] = a[i, j];
-            return result;
-        }
-        
         static public double[,] ZBuffer(int w, int h)
         {
             double[,] zBuffer = new double[w, h];

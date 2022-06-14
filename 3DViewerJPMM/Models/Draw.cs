@@ -8,31 +8,6 @@ namespace _3DViewerJPMM.Models
         private int CX, CY;
         private Vertex eye = new Vertex(0, 0, 1);
 
-        public void ParallelProjection(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, string view)
-        {
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            unsafe
-            {
-                CX = tx;
-                CY = ty;
-                List<List<int>> faces = obj.Faces;
-                List<Vertex> vertices = obj.CurrentVertices;
-                if (showHiddenFaces)
-                {
-                    for (int idf = 0; idf < faces.Count; ++idf)
-                        ParallelProjectionFace(data, faces[idf], vertices, lineColor, view);
-                }
-                else
-                {
-                    for (int idf = 0; idf < faces.Count; ++idf)
-                        if (obj.NormalFaceAt(idf).Z >= 0.0)
-                            ParallelProjectionFace(data, faces[idf], vertices, lineColor, view);
-                }
-            }
-            bmp.UnlockBits(data);
-        }
-                
         private unsafe void ParallelProjectionFace(BitmapData data, List<int> f, List<Vertex> vertices, Color color, string view)
         {
             Vertex v1, v2;
@@ -58,7 +33,7 @@ namespace _3DViewerJPMM.Models
             }
         }
 
-        public void PerspectiveProjection(Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, string view, double fov = -1000)
+        public void Projection(String type, Bitmap bmp, _3DObject obj, int tx, int ty, Color lineColor, bool showHiddenFaces, string view = "XY", double fov = -500)
         {
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -70,13 +45,32 @@ namespace _3DViewerJPMM.Models
                 List<Vertex> vertices = obj.CurrentVertices;
                 if (showHiddenFaces)
                     for (int idf = 0; idf < faces.Count; ++idf)
-                        PerspectiveProjectionFace(data, faces[idf], vertices, lineColor, fov, view);
+                        SelectProjection(type, data, faces[idf], vertices, lineColor, fov, view);
                 else
                     for (int idf = 0; idf < faces.Count; ++idf)
                         if (obj.NormalFaceAt(idf).Z >= 0.0)
-                            PerspectiveProjectionFace(data, faces[idf], vertices, lineColor, fov, view);
+                            SelectProjection(type, data, faces[idf], vertices, lineColor, fov, view);
             }
             bmp.UnlockBits(data);
+        }
+
+        private void SelectProjection(String type, BitmapData data, List<int> faces, List<Vertex> vertices, Color lineColor, double fov, string view)
+        {
+            switch (type)
+            {
+                case "Cabinet":
+                    ObliqueProjectionFaceXY(data, faces, vertices, 0.5, lineColor);
+                    break;
+                case "Cavalier":
+                    ObliqueProjectionFaceXY(data, faces, vertices, 1.0, lineColor);
+                    break;
+                case "Perspective":
+                    PerspectiveProjectionFace(data, faces, vertices, lineColor, fov, view);
+                    break;
+                default:
+                    ParallelProjectionFace(data, faces, vertices, lineColor, view);
+                    break;
+            }
         }
 
         private unsafe void PerspectiveProjectionFace(BitmapData data, List<int> f, List<Vertex> vertices, Color color, double fov, string view)
@@ -112,27 +106,6 @@ namespace _3DViewerJPMM.Models
                 Bresenham(data, (int)x1 + CX, (int)y1 + CY, (int)x2 + CX, (int)y2 + CY, color);
             }
         }
-        
-        public void ObliqueProjection(Bitmap bmp, _3DObject obj, int tx, int ty, Color cor, bool showHiddenFaces, double L)
-        {
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            unsafe
-            {
-                CX = tx;
-                CY = ty;
-                List<List<int>> faces = obj.Faces;
-                List<Vertex> vertices = obj.CurrentVertices;
-                if (showHiddenFaces)
-                    for (int idf = 0; idf < faces.Count; ++idf)
-                        ObliqueProjectionFaceXY(data, faces[idf], vertices, L, cor);                    
-                else
-                    for (int idf = 0; idf < faces.Count; ++idf)
-                        if (obj.NormalFaceAt(idf).Y <= 0.0)
-                            ObliqueProjectionFaceXY(data, faces[idf], vertices, L, cor);
-            }
-            bmp.UnlockBits(data);
-        }
 
         private void ObliqueProjectionFaceXY(BitmapData data, List<int> f, List<Vertex> vertices, double L, Color cor)
         {
@@ -155,27 +128,38 @@ namespace _3DViewerJPMM.Models
             }
         }
 
-        public void Flat(Bitmap bmp, _3DObject obj, int tx, int ty, Vertex lightPoint, Vertex eyePoint, int n,
+        public void Lightning(string type, Bitmap bmp, _3DObject obj, int tx, int ty, Vertex lightPoint, Vertex eyePoint, int n,
             Vertex c)
         {
             int height = bmp.Height, width = bmp.Width;
             double[,] zbuffer = ZBuffer(width, height);
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            
+
             EdgeTable et;
             unsafe
             {
                 obj.UpdateNormalFaces();
+                if(type == "Gouraud" || type == "Phong") obj.UpdateNormalVertices();
                 for (int i = 0; i < obj.Faces.Count; ++i)
                     if (obj.NormalFaceAt(i).Z >= 0)
-                    {
-                        et = obj.CreateFlatET(i, height, tx, ty, lightPoint, eyePoint, n, c);
-                        ScanLineFaceFlat(data, et, zbuffer);
-                    }
+                        switch(type)
+                        {
+                            case "Gouraud":
+                                et = obj.CreateGouraudET(i, height, tx, ty, lightPoint, eyePoint, n, c);
+                                ScanLineFaceGouraud(data, et, zbuffer);
+                                break;
+                            case "Phong":
+                                et = obj.CreatePhongET(i, height, tx, ty, lightPoint, eyePoint, n, c);
+                                ScanLineFacePhong(data, et, zbuffer, lightPoint, eyePoint, n, c);
+                                break;
+                            default:
+                                et = obj.CreateFlatET(i, height, tx, ty, lightPoint, eyePoint, n, c);
+                                ScanLineFaceFlat(data, et, zbuffer);
+                                break;
+                        }
             }
             bmp.UnlockBits(data);
-
         }
 
         private void ScanLineFaceFlat(BitmapData data, EdgeTable et, double[,] zbuffer)
@@ -183,8 +167,8 @@ namespace _3DViewerJPMM.Models
             List<NodeAET> lista;
             double z, inczx;
             int y = 0, cont = 0;
-            while (y < et._MAXSIZE && et.AET(y) == null) ++y;
-            
+            while (y < et.MAXSIZE && et.AET(y) == null) ++y;
+
             _AET aet = new _AET(), aetAux;
             do
             {
@@ -193,7 +177,7 @@ namespace _3DViewerJPMM.Models
                     ++cont;
                     aet.Insert(et.AET(y).LIST);
                 }
-                
+
                 aetAux = new _AET();
                 foreach (NodeAET no in aet.LIST)
                 {
@@ -202,29 +186,29 @@ namespace _3DViewerJPMM.Models
                 }
                 aet = aetAux;
                 aet.Sort();
-                
+
                 // desenhando linhas
                 lista = aet.LIST;
                 for (int i = 0, x, x2; i + 1 < lista.Count; i += 2)
                 {
                     x = (int)Math.Round(lista[i].XMin);
                     x2 = (int)Math.Round(lista[i + 1].XMin);
-                    z = lista[i].Zmin;
-                    inczx = (lista[i + 1].Zmin - lista[i].Zmin) / (x2 - x);
+                    z = lista[i].ZMin;
+                    inczx = (lista[i + 1].ZMin - lista[i].ZMin) / (x2 - x);
                     for (int c = x, c2 = (int)lista[i + 1].XMin; c <= c2; ++c)
                     {
                         if (InImage(data, x, y) && z > zbuffer[x, y])
                         {
                             zbuffer[x, y] = z;
                             WritePixel(data, x, y, Color.FromArgb(
-                                (int)lista[i].Rxmin, (int)lista[i].Gymin, (int)lista[i].BZMin)
+                                (int)lista[i].RXMin, (int)lista[i].GYMin, (int)lista[i].BZMin)
                             );
                         }
                         z += inczx;
                         ++x;
                     }
                 }
-                
+
                 for (int i = 0; i < aet.LIST.Count; ++i)
                 {
                     aet.LIST[i].XMin = aet.LIST[i].XMin + aet.LIST[i].IncX;
@@ -234,41 +218,18 @@ namespace _3DViewerJPMM.Models
             } while (aet.LIST.Count > 0); // tem pontos na AET
         }
 
-        public void Gouraud(Bitmap bmp, _3DObject obj, int tx, int ty, Vertex lightPoint, Vertex eyePoint, int n, Vertex c)
-        {
-            int height = bmp.Height, width = bmp.Width;
-            double[,] zbuffer = ZBuffer(width, height);
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-
-            EdgeTable et;
-            unsafe
-            {
-                obj.UpdateNormalFaces();
-                obj.UpdateNormalVertices();
-                for (int i = 0; i < obj.Faces.Count; ++i)
-                    if (obj.NormalFaceAt(i).Z >= 0)
-                    {
-                        et = obj.CreateGouraudET(i, height, tx, ty, lightPoint, eyePoint, n, c);
-                        ScanLineFaceGouraud(data, et, zbuffer);
-                    }
-            }
-            bmp.UnlockBits(data);
-        }
-
         private void ScanLineFaceGouraud(BitmapData data, EdgeTable et, double[,] zbuffer)
         {
             List<NodeAET> lista;
             double z, inczx;
             int y = 0;
             _AET aet = new _AET(), aetAux;
-            while (y < et._MAXSIZE && et.AET(y) == null)
+            while (y < et.MAXSIZE && et.AET(y) == null)
                 ++y;
-            do // laço AET
+            do 
             {
-                if (et.AET(y) != null)
-                    aet.Insert(et.AET(y).LIST); // adicionando novos nodos
-                                                     // removendo nodos com Ymax == Y
+                if (et.AET(y) != null) aet.Insert(et.AET(y).LIST);
+                                               
                 aetAux = new _AET();
                 foreach (NodeAET no in aet.LIST)
                 {
@@ -277,7 +238,7 @@ namespace _3DViewerJPMM.Models
                 }
                 aet = aetAux;
                 aet.Sort();
-                // desenhando linhas
+
                 lista = aet.LIST;
                 for (int i = 0, x, x2; i + 1 < lista.Count; i += 2)
                 {
@@ -316,29 +277,7 @@ namespace _3DViewerJPMM.Models
                     no.BZMin = no.BZMin + no.IncBZ;
                 }
                 ++y;
-            } while (aet.LIST.Count > 0); // tem pontos na AET
-        }
-
-        public void Phong(Bitmap bmp, _3DObject obj, int tx, int ty, Vertex lightPoint, Vertex eyePoint, int n, Vertex c)
-        {
-            int height = bmp.Height, width = bmp.Width;
-            double[,] zbuffer = ZBuffer(width, height);
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-
-            EdgeTable et;
-            unsafe
-            {
-                obj.UpdateNormalFaces();
-                obj.UpdateNormalVertices();
-                for (int i = 0; i < obj.Faces.Count; ++i)
-                    if (obj.NormalFaceAt(i).Z >= 0)
-                    {
-                        et = obj.CreatePhongET(i, height, tx, ty, lightPoint, eyePoint, n, c);
-                        ScanLineFacePhong(data, et, zbuffer, lightPoint, eyePoint, n, c);
-                    }
-            }
-            bmp.UnlockBits(data);
+            } while (aet.LIST.Count > 0);
         }
 
         private void ScanLineFacePhong(BitmapData data, EdgeTable et, double[,] zbuffer, Vertex lightPoint, Vertex eyePoint, int n, Vertex c)
@@ -348,13 +287,13 @@ namespace _3DViewerJPMM.Models
             int y = 0;
             Vertex cor;
             _AET aet = new _AET(), aetAux;
-            while (y < et._MAXSIZE && et.AET(y) == null)
+            while (y < et.MAXSIZE && et.AET(y) == null)
                 ++y;
             do // laço AET
             {
                 if (et.AET(y) != null)
                     aet.Insert(et.AET(y).LIST); // adicionando novos nodos
-                                                     // removendo nodos com Ymax == Y
+                                                // removendo nodos com Ymax == Y
                 aetAux = new _AET();
                 foreach (NodeAET no in aet.LIST)
                 {
@@ -369,7 +308,7 @@ namespace _3DViewerJPMM.Models
                 {
                     x = (int)Math.Round(lista[i].XMin);
                     x2 = (int)Math.Round(lista[i + 1].XMin);
-                    z = lista[i].Zmin;
+                    z = lista[i].ZMin;
                     double r, g, b, incrx, incgx, incbx, dx = x2 - x;
                     r = lista[i].RXMin;
                     g = lista[i].GYMin;
@@ -415,31 +354,31 @@ namespace _3DViewerJPMM.Models
             double r = c.X * c.X + c.X * c.X * ln + c.X * c.X * hnn;
             double g = c.Y * c.Y + c.Y * c.Y * ln + c.Y * c.Y * hnn;
             double b = c.Z * c.Z + c.Z * c.Z * ln + c.Z * c.Z * hnn;
-            
+
             r = r < 0 ? 0 : (r > 1 ? 1 : r);
             g = g < 0 ? 0 : (g > 1 ? 1 : g);
             b = b < 0 ? 0 : (b > 1 ? 1 : b);
-            
+
             return new Vertex(r * 255, g * 255, b * 255);
         }
-            
+
         private unsafe void Bresenham(BitmapData data, int x1, int y1, int x2, int y2, Color color)
         {
             int deltaX = x2 - x1, x, y;
             int deltaY = y2 - y1;
             int declive = 1;
-            int incE, incNE, d; 
+            int incE, incNE, d;
             if (Math.Abs(deltaX) > Math.Abs(deltaY))
             {
                 // mais distante em x
                 if (x1 > x2) Bresenham(data, x2, y2, x1, y1, color);
-                
+
                 if (y1 > y2 && x1 < x2)
-                {   
+                {
                     declive = -1;
                     deltaY = -deltaY;
                 }
-                
+
                 incE = 2 * deltaY;
                 incNE = 2 * (deltaY - deltaX);
                 d = incNE;
@@ -448,7 +387,7 @@ namespace _3DViewerJPMM.Models
                 for (x = x1; x <= x2; ++x)
                 {
                     if (InImage(data, x, y)) WritePixel(data, x, y, color);
-                    
+
                     if (d < 0) d += incE;
                     else
                     {
@@ -458,16 +397,16 @@ namespace _3DViewerJPMM.Models
                 }
             }
             else
-            {   
+            {
                 // mais distante em y
                 if (y1 > y2) Bresenham(data, x2, y2, x1, y1, color);
 
                 if (x1 > x2 && y1 < y2)
-                {  
+                {
                     declive = -1;
                     deltaX = -deltaX;
                 }
-                
+
                 incE = 2 * deltaX;
                 incNE = 2 * (deltaX - deltaY);
                 d = incNE;
@@ -476,7 +415,7 @@ namespace _3DViewerJPMM.Models
                 for (y = y1; y <= y2; ++y)
                 {
                     if (InImage(data, x, y)) WritePixel(data, x, y, color);
-                    
+
                     if (d < 0) d += incE;
                     else
                     {
@@ -486,33 +425,18 @@ namespace _3DViewerJPMM.Models
                 }
             }
         }
-        
-        private bool InImage(BitmapData data, int x, int y)
-        {
-            return x >= 0 && x < data.Width && y >= 0 && y < data.Height;
-        }
+
+        private bool InImage(BitmapData data, int x, int y) => x >= 0 && x < data.Width && y >= 0 && y < data.Height;
 
         private void WritePixel(BitmapData data, int x, int y, Color color)
         {
             unsafe
             {
-                byte* p = gotoxy(x, y, data);
-                *p = color.B;
-                *(p + 1) = color.G;
-                *(p + 2) = color.R;
+                byte* p = (byte*)data.Scan0 + y * data.Stride + x * 3;
+                p[0] = color.B;
+                p[1] = color.G;
+                p[2] = color.R;
             }
-        }
-
-        private unsafe byte* gotoxy(BitmapData bmp, int x, int y)
-        {
-            byte* aux = (byte*)bmp.Scan0.ToPointer();
-            aux += y * bmp.Stride; // linha
-            aux += 3 * x; // coluna
-            return aux;
-        }// fim gotoxy
-        private unsafe byte* gotoxy(int x, int y, BitmapData bmp)
-        {
-            return gotoxy(bmp, x, y);
         }
 
         public void Paint(Bitmap bmp, Color color)

@@ -10,7 +10,7 @@ namespace _3DViewerJPMM
         private _3DObject obj;
         private Bitmap mainBitmap, frontalBitmap, sideBitmap, plantBitmap;
         private Draw draw;
-        private Vertex light, eye;
+        private Vertex light;
         private int x1, y1, x2, y2, tx, ty;
         private bool showHiddenFaces, movingLight;
         private string selectedPerspective;
@@ -37,8 +37,8 @@ namespace _3DViewerJPMM
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 obj = new _3DObject(openFileDialog.FileName);
-                double s = (PBMain.Width >> 2) / Math.Abs(obj.MAX_X - obj.MIN_X);
-                obj.Scaling(s, s, s);
+                double s = (PBMain.Width >> 2) / Math.Abs(obj.MaxX - obj.MinX);
+                obj.Scaling(1, 1, 1);
                 RefreshObject();
                 PBMain.Enabled = true;
             }
@@ -122,6 +122,7 @@ namespace _3DViewerJPMM
             rbCavalier.ForeColor = Color.White;
             rbPerspective.ForeColor = Color.White;
             rb.ForeColor = ObjectBtnColor.BackColor;
+            LoadObjectBtn.BackColor = ObjectBtnColor.BackColor;
         }
 
         private void CheckBoxFaces_CheckedChanged(object sender, EventArgs e)
@@ -155,13 +156,13 @@ namespace _3DViewerJPMM
         {
             x2 = e.X;
             y2 = e.Y;
-            if (e.Button == MouseButtons.Left) // if the mouseleft has been pressed
+            if (e.Button == MouseButtons.Left)
             {
                 obj.RotationX(DegreesToRadians(-(y2 - y1)), showHiddenFaces);
                 obj.RotationY(DegreesToRadians(x2 - x1), showHiddenFaces);
                 RefreshObject();
             }
-            else if (e.Button == MouseButtons.Right) // if the mouseright has been pressed
+            else if (e.Button == MouseButtons.Right)
             {
                 tx += x2 - x1;
                 ty += y2 - y1;
@@ -228,20 +229,9 @@ namespace _3DViewerJPMM
             draw.Paint(frontalBitmap, Color.FromArgb(23, 23, 23));
             draw.Paint(sideBitmap, Color.FromArgb(23, 23, 23));
             draw.Paint(plantBitmap, Color.FromArgb(23, 23, 23));
-            switch(projection)
-            {
-                case "Parallel":
-                    draw.ParallelProjection(frontalBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "XY");
-                    draw.ParallelProjection(sideBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "ZY");
-                    draw.ParallelProjection(plantBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "ZX");
-                    break;
-                case "Perspective":
-                    draw.PerspectiveProjection(frontalBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "XY", -200);
-                    draw.PerspectiveProjection(sideBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "ZY", -200);
-                    draw.PerspectiveProjection(plantBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "ZX", -200);
-                    break;
-            }
-            
+            draw.Projection(projection, frontalBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "XY", -200);
+            draw.Projection(projection, sideBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "ZY", -200);
+            draw.Projection(projection, plantBitmap, obj2, cx, cy, ObjectBtnColor.BackColor, showHiddenFaces, "ZX", -200);
         }
 
         private void LightBtn_MouseDown(object sender, MouseEventArgs e)
@@ -278,7 +268,8 @@ namespace _3DViewerJPMM
                 y = PBMain.Location.Y;
             else if (y > (PBMain.Location.Y + PBMain.Height) - lightBtn.Height)
                 y = (PBMain.Location.Y + PBMain.Height) - lightBtn.Height;
-
+            
+            
             lightBtn.Location = new Point(x, y);
             x = x + (lightBtn.Width >> 1) - PBMain.Location.X;
             y = y + (lightBtn.Height >> 1) - PBMain.Location.Y;
@@ -295,37 +286,16 @@ namespace _3DViewerJPMM
             {
                 UpdateLight(lightBtn.Location.X, lightBtn.Location.Y);
                 draw.Paint(mainBitmap, AmbientBtnColor.BackColor);
-                switch (selectedPerspective)
+                Vertex objColor = new Vertex(ObjectBtnColor.BackColor.R / 255.0, ObjectBtnColor.BackColor.G / 255.0, ObjectBtnColor.BackColor.B / 255.0); 
+                switch (cbLighting.Text)
                 {
-                    case "Cabinet":
+                    case not "Wireframe":
                         HideCheckBox();
-                        draw.ObliqueProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, 0.5);
-                        break;
-                    case "Cavalier":
-                        HideCheckBox();
-                        draw.ObliqueProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, 1);
-                        break;
-                    case "Perspective":
-                        HideCheckBox();
-                        draw.PerspectiveProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, "XY", -200);
+                        draw.Lightning(cbLighting.Text, mainBitmap, obj, tx, ty, light, new Vertex(0, 0, 1), 50, objColor);
                         break;
                     default:
                         ShowCheckBox();
-                        switch(cbLighting.Text)
-                        {
-                            case "Gouraud":
-                                draw.Gouraud(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, new Vertex(0.2, 0.2, 0.2));
-                                break;
-                            case "Flat":
-                               draw.Flat(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, new Vertex (0.2, 0.2, 0.2));
-                               break;
-                            case "Phong":
-                                draw.Phong(mainBitmap, obj, tx, ty, light, new Vertex(1, 1, 0), 10, new Vertex(0.2, 0.2, 0.2));
-                                break;
-                            default:
-                                draw.ParallelProjection(mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces, "XY");
-                                break;
-                        }
+                        draw.Projection(selectedPerspective, mainBitmap, obj, tx, ty, ObjectBtnColor.BackColor, showHiddenFaces);
                         break;
                 }
                 RenderViews(selectedPerspective);
